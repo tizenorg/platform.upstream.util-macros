@@ -20,6 +20,6 @@
 #  CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 aclocaldir = $(datadir)/aclocal
-aclocal_DATA = xorgversion.m4
+aclocal_DATA = xorgversion.m4 xorg-macros.m4
 
 EXTRA_DIST = $(aclocal_DATA)
