@@ -49,3 +49,47 @@ else
 fi
 rm -f conftest.$ac_ext
 ]) # XORG_PROG_RAWCPP
+
+# XORG_MANPAGE_SECTIONS()
+# -----------------------
+# Determine which sections man pages go in for the different man page types
+# on this OS - replaces *ManSuffix settings in old Imake *.cf per-os files.
+# Not sure if there's any better way than just hardcoding by OS name.
+# TODO:  Add way to override settings for distros that don't use defaults.
+AC_DEFUN([XORG_MANPAGE_SECTIONS],[
+AC_REQUIRE([AC_CANONICAL_HOST])
+
+case $host_os in
+	linux*)
+		APP_MAN_SUFFIX=1x
+		LIB_MAN_SUFFIX=3x
+		FILE_MAN_SUFFIX=5x
+		MISC_MAN_SUFFIX=7x
+		DRIVER_MAN_SUFFIX=4x
+	;;
+	solaris*)
+		APP_MAN_SUFFIX=1
+		FILE_MAN_SUFFIX=4
+		MISC_MAN_SUFFIX=5
+		DRIVER_MAN_SUFFIX=7
+		ADMIN_MAN_SUFFIX=1m
+	;;
+esac
+
+# Default settings - classic BSD style
+if test x$APP_MAN_SUFFIX = x    ; then    APP_MAN_SUFFIX=1 ; fi
+if test x$LIB_MAN_SUFFIX = x    ; then    LIB_MAN_SUFFIX=3 ; fi
+if test x$FILE_MAN_SUFFIX = x   ; then   FILE_MAN_SUFFIX=5 ; fi
+if test x$MISC_MAN_SUFFIX = x   ; then   MISC_MAN_SUFFIX=7 ; fi
+if test x$DRIVER_MAN_SUFFIX = x ; then DRIVER_MAN_SUFFIX=4 ; fi
+if test x$ADMIN_MAN_SUFFIX = x  ; then  ADMIN_MAN_SUFFIX=8 ; fi
+
+AC_SUBST([APP_MAN_SUFFIX])
+AC_SUBST([LIB_MAN_SUFFIX])
+AC_SUBST([FILE_MAN_SUFFIX])
+AC_SUBST([MISC_MAN_SUFFIX])
+AC_SUBST([DRIVER_MAN_SUFFIX])
+AC_SUBST([ADMIN_MAN_SUFFIX])
+]) # XORG_MANPAGE_SECTIONS
+
+	
