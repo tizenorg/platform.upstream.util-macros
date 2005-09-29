@@ -34,20 +34,37 @@ AC_REQUIRE([AC_PROG_CPP])
 AC_PATH_PROGS(RAWCPP, [cpp], [${CPP}], 
    [$PATH:/bin:/usr/bin:/usr/lib:/usr/libexec:/usr/ccs/lib:/usr/ccs/lbin:/lib])
 
+# Check for flag to avoid builtin definitions - assumes unix is predefined,
+# which is not the best choice for supporting other OS'es, but covers most
+# of the ones we need for now.
+AC_MSG_CHECKING([if $RAWCPP requires -undef])
+AC_LANG_CONFTEST([Does cpp redefine unix ?])
+if test `${RAWCPP} < conftest.$ac_ext | grep -c 'unix'` -eq 1 ; then
+	AC_MSG_RESULT([no])
+else
+	if test `${RAWCPP} -undef < conftest.$ac_ext | grep -c 'unix'` -eq 1 ; then
+		RAWCPPFLAGS=-undef
+		AC_MSG_RESULT([yes])
+	else
+		AC_MSG_ERROR([${RAWCPP} defines unix with or without -undef.  I don't know what to do.])
+	fi
+fi
+rm -f conftest.$ac_ext
+
 AC_MSG_CHECKING([if $RAWCPP requires -traditional])
 AC_LANG_CONFTEST([Does cpp preserve   "whitespace"?])
 if test `${RAWCPP} < conftest.$ac_ext | grep -c 'preserve   \"'` -eq 1 ; then
 	AC_MSG_RESULT([no])
 else
 	if test `${RAWCPP} -traditional < conftest.$ac_ext | grep -c 'preserve   \"'` -eq 1 ; then
-		RAWCPPFLAGS=-traditional
-		AC_SUBST(RAWCPPFLAGS)
+		RAWCPPFLAGS="${RAWCPPFLAGS} -traditional"
 		AC_MSG_RESULT([yes])
 	else
-		AC_MSG_ERROR([${CPP} does not preserve whitespace with or without -traditional.  I don't know what to do.])
+		AC_MSG_ERROR([${RAWCPP} does not preserve whitespace with or without -traditional.  I don't know what to do.])
 	fi
 fi
 rm -f conftest.$ac_ext
+AC_SUBST(RAWCPPFLAGS)
 ]) # XORG_PROG_RAWCPP
 
 # XORG_MANPAGE_SECTIONS()
