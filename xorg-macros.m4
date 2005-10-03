@@ -109,4 +109,34 @@ AC_SUBST([DRIVER_MAN_SUFFIX])
 AC_SUBST([ADMIN_MAN_SUFFIX])
 ]) # XORG_MANPAGE_SECTIONS
 
-	
+# XORG_CHECK_LINUXDOC
+# -------------------
+# Defines the variable MAKE_TEXT if the necessary tools and
+# files are found. $(MAKE_TEXT) blah.sgml will then produce blah.txt.
+# Whether or not the necessary tools and files are found can be checked
+# with the AM_CONDITIONAL "BUILD_LINUXDOC"
+AC_DEFUN([XORG_CHECK_LINUXDOC],[
+AC_CHECK_FILE(
+	[$prefix/share/X11/sgml/defs.ent], 
+	[DEFS_ENT_PATH=$prefix/share/X11/sgml],
+	[DEFS_ENT_PATH=]
+)
+
+AC_PATH_PROG(LINUXDOC, linuxdoc)
+
+AC_MSG_CHECKING([Whether to build documentation])
+
+if [[ ! -z $DEFS_ENT_PATH ] && [ ! -z $LINUXDOC ]] ; then
+   BUILDDOC=yes
+else
+   BUILDDOC=no
+fi
+
+AM_CONDITIONAL(BUILD_LINUXDOC, [test x$BUILDDOC = xyes])
+
+AC_MSG_RESULT([$BUILDDOC])
+
+MAKE_TEXT="SGML_SEARCH_PATH=$DEFS_ENT_PATH $LINUXDOC -B txt"
+
+AC_SUBST(MAKE_TEXT)
+]) # XORG_CHECK_LINUXDOC
