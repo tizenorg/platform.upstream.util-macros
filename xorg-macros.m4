@@ -1,4 +1,4 @@
-dnl $XdotOrg: $
+dnl $Id$
 dnl
 dnl Copyright 2005 Sun Microsystems, Inc.  All rights reserved.
 dnl 
@@ -72,34 +72,93 @@ AC_SUBST(RAWCPPFLAGS)
 # Determine which sections man pages go in for the different man page types
 # on this OS - replaces *ManSuffix settings in old Imake *.cf per-os files.
 # Not sure if there's any better way than just hardcoding by OS name.
-# TODO:  Add way to override settings for distros that don't use defaults.
+# Override default settings by setting environment variables
+
 AC_DEFUN([XORG_MANPAGE_SECTIONS],[
 AC_REQUIRE([AC_CANONICAL_HOST])
 
-case $host_os in
-	linux*)
-		APP_MAN_SUFFIX=1x
-		LIB_MAN_SUFFIX=3x
-		FILE_MAN_SUFFIX=5x
-		MISC_MAN_SUFFIX=7x
-		DRIVER_MAN_SUFFIX=4x
-	;;
-	solaris*)
-		APP_MAN_SUFFIX=1
-		FILE_MAN_SUFFIX=4
-		MISC_MAN_SUFFIX=5
-		DRIVER_MAN_SUFFIX=7
-		ADMIN_MAN_SUFFIX=1m
-	;;
-esac
+if test x$APP_MAN_SUFFIX = x    ; then
+    case $host_os in
+	linux*)	APP_MAN_SUFFIX=1x ;;
+	*)	APP_MAN_SUFFIX=1  ;;
+    esac
+fi
+if test x$APP_MAN_DIR = x    ; then
+    case $host_os in
+	linux*)	APP_MAN_DIR='$(mandir)/man1' ;;
+	*)	APP_MAN_DIR='$(mandir)/man$(APP_MAN_SUFFIX)' ;;
+    esac
+fi
 
-# Default settings - classic BSD style
-if test x$APP_MAN_SUFFIX = x    ; then    APP_MAN_SUFFIX=1 ; fi
-if test x$LIB_MAN_SUFFIX = x    ; then    LIB_MAN_SUFFIX=3 ; fi
-if test x$FILE_MAN_SUFFIX = x   ; then   FILE_MAN_SUFFIX=5 ; fi
-if test x$MISC_MAN_SUFFIX = x   ; then   MISC_MAN_SUFFIX=7 ; fi
-if test x$DRIVER_MAN_SUFFIX = x ; then DRIVER_MAN_SUFFIX=4 ; fi
-if test x$ADMIN_MAN_SUFFIX = x  ; then  ADMIN_MAN_SUFFIX=8 ; fi
+if test x$LIB_MAN_SUFFIX = x    ; then
+    case $host_os in
+	linux*)	LIB_MAN_SUFFIX=3x ;;
+	*)	LIB_MAN_SUFFIX=3  ;;
+    esac
+fi
+if test x$LIB_MAN_DIR = x    ; then
+    case $host_os in
+	linux*)	LIB_MAN_DIR='$(mandir)/man3' ;;
+	*)	LIB_MAN_DIR='$(mandir)/man$(LIB_MAN_SUFFIX)' ;;
+    esac
+fi
+
+if test x$FILE_MAN_SUFFIX = x    ; then
+    case $host_os in
+	linux*)		FILE_MAN_SUFFIX=5x ;;
+	solaris*)	FILE_MAN_SUFFIX=4  ;;
+	*)		FILE_MAN_SUFFIX=5  ;;
+    esac
+fi
+if test x$FILE_MAN_DIR = x    ; then
+    case $host_os in
+	linux*)	FILE_MAN_DIR='$(mandir)/man5' ;;
+	*)	FILE_MAN_DIR='$(mandir)/man$(FILE_MAN_SUFFIX)' ;;
+    esac
+fi
+
+# In Imake's linux.cf, the misc man suffix & dir was only changed for 
+# LinuxDebian, not other Linuxes, so we leave it unchanged here
+if test x$MISC_MAN_SUFFIX = x    ; then
+    case $host_os in
+#	linux*)		MISC_MAN_SUFFIX=7x ;;
+	solaris*)	MISC_MAN_SUFFIX=5  ;;
+	*)		MISC_MAN_SUFFIX=7  ;;
+    esac
+fi
+if test x$MISC_MAN_DIR = x    ; then
+    case $host_os in
+#	linux*)	MISC_MAN_DIR='$(mandir)/man7' ;;
+	*)	MISC_MAN_DIR='$(mandir)/man$(MISC_MAN_SUFFIX)' ;;
+    esac
+fi
+
+# In Imake's linux.cf, the driver man suffix & dir was only changed for 
+# LinuxDebian, not other Linuxes, so we leave it unchanged here
+if test x$DRIVER_MAN_SUFFIX = x    ; then
+    case $host_os in
+#	linux*)		DRIVER_MAN_SUFFIX=4x ;;
+	solaris*)	DRIVER_MAN_SUFFIX=7  ;;
+	*)		DRIVER_MAN_SUFFIX=4  ;;
+    esac
+fi
+if test x$DRIVER_MAN_DIR = x    ; then
+    case $host_os in
+#	linux*)	DRIVER_MAN_DIR='$(mandir)/man4' ;;
+	*)	DRIVER_MAN_DIR='$(mandir)/man$(DRIVER_MAN_SUFFIX)' ;;
+    esac
+fi
+
+if test x$ADMIN_MAN_SUFFIX = x    ; then
+    case $host_os in
+	solaris*)	ADMIN_MAN_SUFFIX=1m ;;
+	*)		ADMIN_MAN_SUFFIX=8  ;;
+    esac
+fi
+if test x$ADMIN_MAN_DIR = x    ; then
+    ADMIN_MAN_DIR='$(mandir)/man$(ADMIN_MAN_SUFFIX)'
+fi
+
 
 AC_SUBST([APP_MAN_SUFFIX])
 AC_SUBST([LIB_MAN_SUFFIX])
@@ -107,6 +166,12 @@ AC_SUBST([FILE_MAN_SUFFIX])
 AC_SUBST([MISC_MAN_SUFFIX])
 AC_SUBST([DRIVER_MAN_SUFFIX])
 AC_SUBST([ADMIN_MAN_SUFFIX])
+AC_SUBST([APP_MAN_DIR])
+AC_SUBST([LIB_MAN_DIR])
+AC_SUBST([FILE_MAN_DIR])
+AC_SUBST([MISC_MAN_DIR])
+AC_SUBST([DRIVER_MAN_DIR])
+AC_SUBST([ADMIN_MAN_DIR])
 ]) # XORG_MANPAGE_SECTIONS
 
 # XORG_CHECK_LINUXDOC

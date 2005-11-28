@@ -1,0 +1,12 @@
+2005-11-28  Alan Coopersmith  <alan.coopersmith@sun.com>
+
+	* macros/xorg-macros.m4: 
+	Bug #5167 <https://bugs.freedesktop.org/show_bug.cgi?id=5167>
+	Linux prefers *.1x man pages in man1 subdirectory.
+	Also allow builders to override man page suffixes & directories
+	to match their environments via configure-time environment variables.
+	
+2005-10-17  Kristian Høgsberg  <krh@redhat.com>
+
+	* macros/xorgversion.m4: Add missing comma in AC_HELP_STRING call.
+
