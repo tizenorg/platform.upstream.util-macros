@@ -205,3 +205,42 @@ MAKE_TEXT="SGML_SEARCH_PATH=$DEFS_ENT_PATH $LINUXDOC -B txt"
 
 AC_SUBST(MAKE_TEXT)
 ]) # XORG_CHECK_LINUXDOC
+
+# XORG_CHECK_MALLOC_ZERO
+# ----------------------
+# Defines {MALLOC,XMALLOC,XTMALLOC}_ZERO_CFLAGS appropriately if
+# malloc(0) returns NULL.  Packages should add one of these cflags to
+# their AM_CFLAGS (or other appropriate *_CFLAGS) to use them.
+AC_DEFUN([XORG_CHECK_MALLOC_ZERO],[
+AC_ARG_ENABLE(malloc0returnsnull,
+	AC_HELP_STRING([--enable-malloc0returnsnull],
+		       [malloc(0) returns NULL (default: auto)]),
+	[MALLOC_ZERO_RETURNS_NULL=$enableval],
+	[MALLOC_ZERO_RETURNS_NULL=auto])
+
+AC_MSG_CHECKING([whether malloc(0) returns NULL])
+if test "x$MALLOC_ZERO_RETURNS_NULL" = xauto; then
+	AC_RUN_IFELSE([
+char *malloc();
+main() {
+    exit(malloc(0) == NULL ? 0 : 1);
+}],
+		[MALLOC_ZERO_RETURNS_NULL=yes],
+		[MALLOC_ZERO_RETURNS_NULL=no])
+fi
+AC_MSG_RESULT([$MALLOC_ZERO_RETURNS_NULL])
+
+if test "x$MALLOC_ZERO_RETURNS_NULL" = xyes; then
+	MALLOC_ZERO_CFLAGS="-DMALLOC_0_RETURNS_NULL"
+	XMALLOC_ZERO_CFLAGS=$MALLOC_ZERO_CFLAGS
+	XTMALLOC_ZERO_CFLAGS="$MALLOC_ZERO_CFLAGS -DXTMALLOC_BC"
+else
+	MALLOC_ZERO_CFLAGS=""
+	XMALLOC_ZERO_CFLAGS=""
+	XTMALLOC_ZERO_CFLAGS=""
+fi
+
+AC_SUBST([MALLOC_ZERO_CFLAGS])
+AC_SUBST([XMALLOC_ZERO_CFLAGS])
+AC_SUBST([XTMALLOC_ZERO_CFLAGS])
+]) # XORG_CHECK_MALLOC_ZERO

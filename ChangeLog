@@ -1,3 +1,9 @@
+2005-12-02  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+
+	* xorg-macros.m4:
+	Add macro to detect when malloc(0) returns NULL for use in
+	libraries.
+
 2005-11-28  Alan Coopersmith  <alan.coopersmith@sun.com>
 
 	* macros/xorg-macros.m4: 
