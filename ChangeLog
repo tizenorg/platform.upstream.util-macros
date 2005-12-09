@@ -1,3 +1,10 @@
+2005-12-09  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+
+	* xorg-macros.m4:
+	Better macro to check whether any of malloc(0), realloc(ptr,0) or
+	calloc(0) return NULL since Xlib expects all three to return a
+	valid pointer.
+
 2005-12-08  Kevin E. Martin  <kem-at-freedesktop-dot-org>
 
 	* xorg-macros.m4:

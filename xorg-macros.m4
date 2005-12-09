@@ -241,8 +241,15 @@ AC_MSG_CHECKING([whether malloc(0) returns NULL])
 if test "x$MALLOC_ZERO_RETURNS_NULL" = xauto; then
 	AC_RUN_IFELSE([
 char *malloc();
+char *realloc();
+char *calloc();
 main() {
-    exit(malloc(0) == NULL ? 0 : 1);
+    char *m0, *r0, *c0, *p;
+    m0 = malloc(0);
+    p = malloc(10);
+    r0 = realloc(p,0);
+    c0 = calloc(0);
+    exit(m0 == 0 || r0 == 0 || c0 == 0 ? 0 : 1);
 }],
 		[MALLOC_ZERO_RETURNS_NULL=yes],
 		[MALLOC_ZERO_RETURNS_NULL=no])
