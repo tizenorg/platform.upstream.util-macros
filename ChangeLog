@@ -1,3 +1,8 @@
+2005-12-08  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+
+	* xorg-macros.m4:
+	Add support for building other formats from sgml docs.
+
 2005-12-03  Kevin E. Martin  <kem-at-freedesktop-dot-org>
 
 	* configure.ac:
