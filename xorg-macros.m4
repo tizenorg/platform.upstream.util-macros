@@ -1,6 +1,6 @@
 dnl $Id$
 dnl
-dnl Copyright 2005 Sun Microsystems, Inc.  All rights reserved.
+dnl Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.
 dnl 
 dnl Permission to use, copy, modify, distribute, and sell this software and its
 dnl documentation for any purpose is hereby granted without fee, provided that
@@ -270,3 +270,40 @@ AC_SUBST([MALLOC_ZERO_CFLAGS])
 AC_SUBST([XMALLOC_ZERO_CFLAGS])
 AC_SUBST([XTMALLOC_ZERO_CFLAGS])
 ]) # XORG_CHECK_MALLOC_ZERO
+
+# XORG_WITH_LINT()
+# ----------------
+# Sets up flags for source checkers such as lint and sparse if --with-lint
+# is specified.   (Use --with-lint=sparse for sparse.)
+# Sets $LINT to name of source checker passed with --with-lint (default: lint)
+# Sets $LINT_FLAGS to flags to pass to source checker
+# Sets LINT automake conditional if enabled (default: disabled)
+#
+AC_DEFUN([XORG_WITH_LINT],[
+
+# Allow checking code with lint, sparse, etc.
+AC_ARG_WITH(lint, [AC_HELP_STRING([--with-lint],
+		[Use a lint-style source code checker (default: disabled)])],
+		[use_lint=$withval], [use_lint=no])
+if test "x$use_lint" = "xyes" ; then
+	LINT="lint"
+else
+	LINT="$use_lint"
+fi
+if test "x$LINT_FLAGS" = "x" -a "x$LINT" != "xno" ; then
+    case $LINT in
+	lint|*/lint)
+	    case $host_os in
+		solaris*)
+			LINT_FLAGS="-u -b -h -erroff=E_INDISTING_FROM_TRUNC2"
+			;;
+	    esac
+	    ;;
+    esac
+fi
+
+AC_SUBST(LINT)
+AC_SUBST(LINT_FLAGS)
+AM_CONDITIONAL(LINT, [test x$LINT != xno])
+
+]) # XORG_ENABLE_LINT
