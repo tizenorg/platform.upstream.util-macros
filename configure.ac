@@ -41,4 +41,4 @@ if test "x$RELEASE_VERSION" != "x"; then
 	AC_MSG_NOTICE([Building with package name set to $PACKAGE])
 fi
 
-AC_OUTPUT([Makefile])
+AC_OUTPUT([Makefile xorg-macros.m4])
