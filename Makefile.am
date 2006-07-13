@@ -22,4 +22,12 @@
 aclocaldir = $(datadir)/aclocal
 aclocal_DATA = xorgversion.m4 xorg-macros.m4
 
-EXTRA_DIST = $(aclocal_DATA)
+EXTRA_DIST = $(aclocal_DATA) ChangeLog
+
+.PHONY: ChangeLog
+
+ChangeLog:
+	(cd $(srcdir) && git-log) > ChangeLog
+
+dist-hook: ChangeLog
+
