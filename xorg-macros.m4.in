@@ -348,4 +348,37 @@ AC_SUBST(LINT)
 AC_SUBST(LINT_FLAGS)
 AM_CONDITIONAL(LINT, [test x$LINT != xno])
 
-]) # XORG_ENABLE_LINT
+]) # XORG_WITH_LINT
+
+# XORG_LINT_LIBRARY(LIBNAME)
+# --------------------------
+# Minimum version: 1.1.0
+#
+# Sets up flags for building lint libraries for checking programs that call
+# functions in the library.
+# Disabled by default, enable with --enable-lint-library
+# Sets: 
+#	@LINTLIB@		- name of lint library file to make
+#	MAKE_LINT_LIB		- automake conditional
+#
+
+AC_DEFUN([XORG_LINT_LIBRARY],[
+AC_REQUIRE([XORG_WITH_LINT])
+# Build lint "library" for more indepth checks of programs calling this library
+AC_ARG_ENABLE(lint-library, [AC_HELP_STRING([--enable-lint-library],
+	[Create lint library (default: disabled)])],
+	[make_lint_lib=$enableval], [make_lint_lib=no])
+if test "x$make_lint_lib" != "xno" ; then
+	if test "x$LINT" = "xno" ; then
+		AC_MSG_ERROR([Cannot make lint library without --with-lint])
+	fi
+	if test "x$make_lint_lib" = "xyes" ; then
+		LINTLIB=llib-l$1.ln
+	else
+		LINTLIB=$make_lint_lib
+	fi
+fi
+AC_SUBST(LINTLIB)
+AM_CONDITIONAL(MAKE_LINT_LIB, [test x$make_lint_lib != xno])
+
+]) # XORG_LINT_LIBRARY
