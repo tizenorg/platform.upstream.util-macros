@@ -18,3 +18,5 @@ missing
 mkinstalldirs
 stamp-h1
 ChangeLog
+xorg-macros.m4
+util-macros-*
