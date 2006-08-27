@@ -31,3 +31,4 @@ ChangeLog:
 
 dist-hook: ChangeLog
 
+DISTCLEANFILES = ChangeLog
