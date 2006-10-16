@@ -214,7 +214,7 @@ AC_MSG_RESULT([$BUILDDOC])
 
 AC_MSG_CHECKING([Whether to build pdf documentation])
 
-if test x$PS2PDF != x ; then
+if test x$PS2PDF != x && test x$BUILD_PDFDOC != xno; then
    BUILDPDFDOC=yes
 else
    BUILDPDFDOC=no
