@@ -235,6 +235,61 @@ AC_SUBST(MAKE_PDF)
 AC_SUBST(MAKE_HTML)
 ]) # XORG_CHECK_LINUXDOC
 
+# XORG_CHECK_DOCBOOK
+# -------------------
+# Minimum version: 1.0.0
+#
+# Defines the variable MAKE_TEXT if the necessary tools and
+# files are found. $(MAKE_TEXT) blah.sgml will then produce blah.txt.
+# Whether or not the necessary tools and files are found can be checked
+# with the AM_CONDITIONAL "BUILD_DOCBOOK"
+AC_DEFUN([XORG_CHECK_DOCBOOK],[
+AC_CHECK_FILE(
+	[$prefix/share/X11/sgml/defs.ent], 
+	[DEFS_ENT_PATH=$prefix/share/X11/sgml],
+	[DEFS_ENT_PATH=]
+)
+
+AC_PATH_PROG(DOCBOOKPS, docbook2ps)
+AC_PATH_PROG(DOCBOOKPDF, docbook2pdf)
+AC_PATH_PROG(DOCBOOKHTML, docbook2html)
+AC_PATH_PROG(DOCBOOKTXT, docbook2txt)
+
+AC_MSG_CHECKING([Whether to build documentation])
+
+if test x$DEFS_ENT_PATH != x && test x$DOCBOOKTXT != x ; then
+   BUILDDOC=yes
+else
+   BUILDDOC=no
+fi
+
+AM_CONDITIONAL(BUILD_DOCBOOK, [test x$BUILDDOC = xyes])
+
+AC_MSG_RESULT([$BUILDDOC])
+
+AC_MSG_CHECKING([Whether to build pdf documentation])
+
+if test x$DOCBOOKPDF != x && test x$BUILD_PDFDOC != xno; then
+   BUILDPDFDOC=yes
+else
+   BUILDPDFDOC=no
+fi
+
+AM_CONDITIONAL(BUILD_PDFDOC, [test x$BUILDPDFDOC = xyes])
+
+AC_MSG_RESULT([$BUILDPDFDOC])
+
+MAKE_TEXT="$DOCBOOKTXT"
+MAKE_PS="$DOCBOOKPS"
+MAKE_PDF="$DOCBOOKPDF"
+MAKE_HTML="$DOCBOOKHTML"
+
+AC_SUBST(MAKE_TEXT)
+AC_SUBST(MAKE_PS)
+AC_SUBST(MAKE_PDF)
+AC_SUBST(MAKE_HTML)
+]) # XORG_CHECK_DOCBOOK
+
 # XORG_CHECK_MALLOC_ZERO
 # ----------------------
 # Minimum version: 1.0.0
