@@ -238,13 +238,17 @@ AC_SUBST(MAKE_HTML)
 # -------------------
 # Minimum version: 1.0.0
 #
-# Defines the variable MAKE_TEXT if the necessary tools and
-# files are found. $(MAKE_TEXT) blah.sgml will then produce blah.txt.
-# Whether or not the necessary tools and files are found can be checked
-# with the AM_CONDITIONAL "BUILD_DOCBOOK"
+# Checks for the ability to build output formats from SGML DocBook source.
+# For XXX in {TXT, PDF, PS, HTML}, the AM_CONDITIONAL "BUILD_XXXDOC"
+# indicates whether the necessary tools and files are found and, if set,
+# $(MAKE_XXX) blah.sgml will produce blah.xxx.
 AC_DEFUN([XORG_CHECK_DOCBOOK],[
 XORG_SGML_PATH=$prefix/share/sgml
 HAVE_DEFS_ENT=
+BUILDTXTDOC=no
+BUILDPDFDOC=no
+BUILDPSDOC=no
+BUILDHTMLDOC=no
 
 AC_CHECK_FILE([$XORG_SGML_PATH/X11/defs.ent], [HAVE_DEFS_ENT=yes])
 
@@ -253,29 +257,37 @@ AC_PATH_PROG(DOCBOOKPDF, docbook2pdf)
 AC_PATH_PROG(DOCBOOKHTML, docbook2html)
 AC_PATH_PROG(DOCBOOKTXT, docbook2txt)
 
-AC_MSG_CHECKING([Whether to build documentation])
-
-if test x$HAVE_DEFS_ENT != x && test x$DOCBOOKTXT != x ; then
-   BUILDDOC=yes
-else
-   BUILDDOC=no
+AC_MSG_CHECKING([Whether to build text documentation])
+if test x$HAVE_DEFS_ENT != x && test x$DOCBOOKTXT != x &&
+   test x$BUILD_TXTDOC != xno; then
+	BUILDTXTDOC=yes
 fi
+AM_CONDITIONAL(BUILD_TXTDOC, [test x$BUILDTXTDOC = xyes])
+AC_MSG_RESULT([$BUILDTXTDOC])
 
-AM_CONDITIONAL(BUILD_DOCBOOK, [test x$BUILDDOC = xyes])
-
-AC_MSG_RESULT([$BUILDDOC])
-
-AC_MSG_CHECKING([Whether to build pdf documentation])
-
-if test x$DOCBOOKPDF != x && test x$BUILD_PDFDOC != xno; then
-   BUILDPDFDOC=yes
-else
-   BUILDPDFDOC=no
+AC_MSG_CHECKING([Whether to build PDF documentation])
+if test x$HAVE_DEFS_ENT != x && test x$DOCBOOKPDF != x &&
+   test x$BUILD_PDFDOC != xno; then
+	BUILDPDFDOC=yes
 fi
-
 AM_CONDITIONAL(BUILD_PDFDOC, [test x$BUILDPDFDOC = xyes])
-
 AC_MSG_RESULT([$BUILDPDFDOC])
+
+AC_MSG_CHECKING([Whether to build PostScript documentation])
+if test x$HAVE_DEFS_ENT != x && test x$DOCBOOKPS != x &&
+   test x$BUILD_PSDOC != xno; then
+	BUILDPSDOC=yes
+fi
+AM_CONDITIONAL(BUILD_PSDOC, [test x$BUILDPSDOC = xyes])
+AC_MSG_RESULT([$BUILDPSDOC])
+
+AC_MSG_CHECKING([Whether to build HTML documentation])
+if test x$HAVE_DEFS_ENT != x && test x$DOCBOOKHTML != x &&
+   test x$BUILD_HTMLDOC != xno; then
+	BUILDHTMLDOC=yes
+fi
+AM_CONDITIONAL(BUILD_HTMLDOC, [test x$BUILDHTMLDOC = xyes])
+AC_MSG_RESULT([$BUILDHTMLDOC])
 
 MAKE_TEXT="SGML_SEARCH_PATH=$XORG_SGML_PATH $DOCBOOKTXT"
 MAKE_PS="SGML_SEARCH_PATH=$XORG_SGML_PATH $DOCBOOKPS"
