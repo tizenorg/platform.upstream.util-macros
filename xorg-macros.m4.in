@@ -191,18 +191,17 @@ AC_SUBST([ADMIN_MAN_DIR])
 # Whether or not the necessary tools and files are found can be checked
 # with the AM_CONDITIONAL "BUILD_LINUXDOC"
 AC_DEFUN([XORG_CHECK_LINUXDOC],[
-AC_CHECK_FILE(
-	[$prefix/share/X11/sgml/defs.ent], 
-	[DEFS_ENT_PATH=$prefix/share/X11/sgml],
-	[DEFS_ENT_PATH=]
-)
+XORG_SGML_PATH=$prefix/share/sgml
+HAVE_DEFS_ENT=
+
+AC_CHECK_FILE([$XORG_SGML_PATH/X11/defs.ent], [HAVE_DEFS_ENT=yes])
 
 AC_PATH_PROG(LINUXDOC, linuxdoc)
 AC_PATH_PROG(PS2PDF, ps2pdf)
 
 AC_MSG_CHECKING([Whether to build documentation])
 
-if test x$DEFS_ENT_PATH != x && test x$LINUXDOC != x ; then
+if test x$HAVE_DEFS_ENT != x && test x$LINUXDOC != x ; then
    BUILDDOC=yes
 else
    BUILDDOC=no
@@ -224,10 +223,10 @@ AM_CONDITIONAL(BUILD_PDFDOC, [test x$BUILDPDFDOC = xyes])
 
 AC_MSG_RESULT([$BUILDPDFDOC])
 
-MAKE_TEXT="SGML_SEARCH_PATH=$DEFS_ENT_PATH GROFF_NO_SGR=y $LINUXDOC -B txt"
-MAKE_PS="SGML_SEARCH_PATH=$DEFS_ENT_PATH $LINUXDOC -B latex --papersize=letter --output=ps"
+MAKE_TEXT="SGML_SEARCH_PATH=$XORG_SGML_PATH GROFF_NO_SGR=y $LINUXDOC -B txt"
+MAKE_PS="SGML_SEARCH_PATH=$XORG_SGML_PATH $LINUXDOC -B latex --papersize=letter --output=ps"
 MAKE_PDF="$PS2PDF"
-MAKE_HTML="SGML_SEARCH_PATH=$DEFS_ENT_PATH $LINUXDOC  -B html --split=0"
+MAKE_HTML="SGML_SEARCH_PATH=$XORG_SGML_PATH $LINUXDOC  -B html --split=0"
 
 AC_SUBST(MAKE_TEXT)
 AC_SUBST(MAKE_PS)
@@ -244,11 +243,10 @@ AC_SUBST(MAKE_HTML)
 # Whether or not the necessary tools and files are found can be checked
 # with the AM_CONDITIONAL "BUILD_DOCBOOK"
 AC_DEFUN([XORG_CHECK_DOCBOOK],[
-AC_CHECK_FILE(
-	[$prefix/share/X11/sgml/defs.ent], 
-	[DEFS_ENT_PATH=$prefix/share/X11/sgml],
-	[DEFS_ENT_PATH=]
-)
+XORG_SGML_PATH=$prefix/share/sgml
+HAVE_DEFS_ENT=
+
+AC_CHECK_FILE([$XORG_SGML_PATH/X11/defs.ent], [HAVE_DEFS_ENT=yes])
 
 AC_PATH_PROG(DOCBOOKPS, docbook2ps)
 AC_PATH_PROG(DOCBOOKPDF, docbook2pdf)
@@ -257,7 +255,7 @@ AC_PATH_PROG(DOCBOOKTXT, docbook2txt)
 
 AC_MSG_CHECKING([Whether to build documentation])
 
-if test x$DEFS_ENT_PATH != x && test x$DOCBOOKTXT != x ; then
+if test x$HAVE_DEFS_ENT != x && test x$DOCBOOKTXT != x ; then
    BUILDDOC=yes
 else
    BUILDDOC=no
@@ -279,10 +277,10 @@ AM_CONDITIONAL(BUILD_PDFDOC, [test x$BUILDPDFDOC = xyes])
 
 AC_MSG_RESULT([$BUILDPDFDOC])
 
-MAKE_TEXT="$DOCBOOKTXT"
-MAKE_PS="$DOCBOOKPS"
-MAKE_PDF="$DOCBOOKPDF"
-MAKE_HTML="$DOCBOOKHTML"
+MAKE_TEXT="SGML_SEARCH_PATH=$XORG_SGML_PATH $DOCBOOKTXT"
+MAKE_PS="SGML_SEARCH_PATH=$XORG_SGML_PATH $DOCBOOKPS"
+MAKE_PDF="SGML_SEARCH_PATH=$XORG_SGML_PATH $DOCBOOKPDF"
+MAKE_HTML="SGML_SEARCH_PATH=$XORG_SGML_PATH $DOCBOOKHTML"
 
 AC_SUBST(MAKE_TEXT)
 AC_SUBST(MAKE_PS)
