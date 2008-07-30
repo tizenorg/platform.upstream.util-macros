@@ -196,7 +196,9 @@ AC_SUBST([ADMIN_MAN_DIR])
 # Whether or not the necessary tools and files are found can be checked
 # with the AM_CONDITIONAL "BUILD_LINUXDOC"
 AC_DEFUN([XORG_CHECK_LINUXDOC],[
-XORG_SGML_PATH=$prefix/share/sgml
+if test x$XORG_SGML_PATH = x ; then
+    XORG_SGML_PATH=$prefix/share/sgml
+fi
 HAVE_DEFS_ENT=
 
 if test x"$cross_compiling" = x"yes" ; then
@@ -252,7 +254,9 @@ AC_SUBST(MAKE_HTML)
 # indicates whether the necessary tools and files are found and, if set,
 # $(MAKE_XXX) blah.sgml will produce blah.xxx.
 AC_DEFUN([XORG_CHECK_DOCBOOK],[
-XORG_SGML_PATH=$prefix/share/sgml
+if test x$XORG_SGML_PATH = x ; then
+    XORG_SGML_PATH=$prefix/share/sgml
+fi
 HAVE_DEFS_ENT=
 BUILDTXTDOC=no
 BUILDPDFDOC=no
