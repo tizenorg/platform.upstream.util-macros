@@ -80,6 +80,10 @@ else
 	if test `${RAWCPP} -undef < conftest.$ac_ext | grep -c 'unix'` -eq 1 ; then
 		RAWCPPFLAGS=-undef
 		AC_MSG_RESULT([yes])
+	# under Cygwin unix is still defined even with -undef
+	elif test `${RAWCPP} -undef -ansi < conftest.$ac_ext | grep -c 'unix'` -eq 1 ; then
+		RAWCPPFLAGS="-undef -ansi"
+		AC_MSG_RESULT([yes, with -ansi])
 	else
 		AC_MSG_ERROR([${RAWCPP} defines unix with or without -undef.  I don't know what to do.])
 	fi
