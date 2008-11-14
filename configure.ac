@@ -32,5 +32,6 @@ AM_INIT_AUTOMAKE([foreign dist-bzip2])
 m4_include([xorgversion.m4])
 
 XORG_RELEASE_VERSION
+XORG_CHANGELOG
 
 AC_OUTPUT([Makefile xorg-macros.m4:xorg-macros.m4.in:xorgversion.m4])
