@@ -1,3 +1,4 @@
+dnl @configure_input@
 dnl
 dnl Copyright 2005-2006 Sun Microsystems, Inc.  All rights reserved.
 dnl 
@@ -423,3 +424,4 @@ AC_SUBST(LINTLIB)
 AM_CONDITIONAL(MAKE_LINT_LIB, [test x$make_lint_lib != xno])
 
 ]) # XORG_LINT_LIBRARY
+
