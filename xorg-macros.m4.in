@@ -444,7 +444,12 @@ AC_REQUIRE([AC_PROG_CC])
 if  test "x$GCC" = xyes ; then
     CWARNFLAGS="-Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes \
 -Wmissing-declarations -Wnested-externs -fno-strict-aliasing \
--Wold-style-definition -Wbad-function-cast -Wdeclaration-after-statement"
+-Wbad-function-cast"
+    case `gcc -dumpversion` in
+    4.*)
+	CWARNFLAGS+=" -Wold-style-definition -Wdeclaration-after-statement"
+	;;
+    esac
 else
     AC_CHECK_DECL([__SUNPRO_C], [SUNCC="yes"], [SUNCC="no"])
     if test "x$SUNCC" = "xyes"; then
@@ -453,4 +458,3 @@ else
 fi
 AC_SUBST(CWARNFLAGS)
 ]) # XORG_CWARNFLAGS
-
