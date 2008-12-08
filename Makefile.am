@@ -28,13 +28,9 @@ aclocal_DATA = xorg-macros.m4
 install-data-hook:
 	rm -f $(DESTDIR)$(aclocaldir)/xorgversion.m4
 
-EXTRA_DIST = ChangeLog
-
 .PHONY: ChangeLog
 
 ChangeLog:
 	$(CHANGELOG_CMD)
 
 dist-hook: ChangeLog
-
-DISTCLEANFILES = ChangeLog
