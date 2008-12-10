@@ -446,7 +446,7 @@ if  test "x$GCC" = xyes ; then
 -Wmissing-declarations -Wnested-externs -fno-strict-aliasing \
 -Wbad-function-cast"
     case `gcc -dumpversion` in
-    4.*)
+    3.4.* | 4.*)
 	CWARNFLAGS+=" -Wold-style-definition -Wdeclaration-after-statement"
 	;;
     esac
