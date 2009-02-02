@@ -447,7 +447,7 @@ if  test "x$GCC" = xyes ; then
 -Wbad-function-cast"
     case `gcc -dumpversion` in
     3.4.* | 4.*)
-	CWARNFLAGS+=" -Wold-style-definition -Wdeclaration-after-statement"
+	CWARNFLAGS="$CWARNFLAGS -Wold-style-definition -Wdeclaration-after-statement"
 	;;
     esac
 else
