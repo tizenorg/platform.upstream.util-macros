@@ -35,8 +35,9 @@ dnl of the copyright holder.
 # your configure.ac with the minimum required version, such as:
 # XORG_MACROS_VERSION(1.1)
 #
-# To force at least a version with this macro defined, also add:
-# m4_ifndef([XORG_MACROS_VERSION], [AC_FATAL([must install xorg-macros 1.1 or later before running autoconf/autogen])])
+# To ensure that this macro is defined, also add:
+# m4_ifndef([XORG_MACROS_VERSION],
+#     [m4_fatal([must install xorg-macros before running autoconf/autogen])])
 #
 #
 # See the "minimum version" comment for each macro you use to see what 
