@@ -51,10 +51,10 @@ AC_DEFUN([XORG_MACROS_VERSION],[
 	XORG_MACROS_major=`echo $XORG_MACROS_version | sed 's/\..*$//'`
 	XORG_MACROS_minor=`echo $XORG_MACROS_version | sed -e 's/^[0-9]*\.//' -e 's/\..*$//'`]
 	if test $XORG_MACROS_major -ne $XORG_MACROS_needed_major ; then
-		AC_MSG_ERROR([configure built with incompatible version of xorg-macros.m4 - requires version ${XORG_MACROS_major}.x])
+		AC_MSG_ERROR([configure built with incompatible version of xorg-macros.m4 - requires version ${XORG_MACROS_needed_major}.x])
 	fi
 	if test $XORG_MACROS_minor -lt $XORG_MACROS_needed_minor ; then
-		AC_MSG_ERROR([configure built with too old of a version of xorg-macros.m4 - requires version ${XORG_MACROS_major}.${XORG_MACROS_minor}.0 or newer])
+		AC_MSG_ERROR([configure built with too old of a version of xorg-macros.m4 - requires version ${XORG_MACROS_needed_major}.${XORG_MACROS_needed_minor}.0 or newer])
 	fi
 	AC_MSG_RESULT([yes, $XORG_MACROS_version])
 ]) # XORG_MACROS_VERSION
