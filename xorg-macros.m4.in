@@ -319,7 +319,7 @@ AC_SUBST(MAKE_HTML)
 # their AM_CFLAGS (or other appropriate *_CFLAGS) to use them.
 AC_DEFUN([XORG_CHECK_MALLOC_ZERO],[
 AC_ARG_ENABLE(malloc0returnsnull,
-	AC_HELP_STRING([--enable-malloc0returnsnull],
+	AS_HELP_STRING([--enable-malloc0returnsnull],
 		       [malloc(0) returns NULL (default: auto)]),
 	[MALLOC_ZERO_RETURNS_NULL=$enableval],
 	[MALLOC_ZERO_RETURNS_NULL=auto])
@@ -371,7 +371,7 @@ AC_SUBST([XTMALLOC_ZERO_CFLAGS])
 AC_DEFUN([XORG_WITH_LINT],[
 
 # Allow checking code with lint, sparse, etc.
-AC_ARG_WITH(lint, [AC_HELP_STRING([--with-lint],
+AC_ARG_WITH(lint, [AS_HELP_STRING([--with-lint],
 		[Use a lint-style source code checker (default: disabled)])],
 		[use_lint=$withval], [use_lint=no])
 if test "x$use_lint" = "xyes" ; then
@@ -412,7 +412,7 @@ AM_CONDITIONAL(LINT, [test x$LINT != xno])
 AC_DEFUN([XORG_LINT_LIBRARY],[
 AC_REQUIRE([XORG_WITH_LINT])
 # Build lint "library" for more indepth checks of programs calling this library
-AC_ARG_ENABLE(lint-library, [AC_HELP_STRING([--enable-lint-library],
+AC_ARG_ENABLE(lint-library, [AS_HELP_STRING([--enable-lint-library],
 	[Create lint library (default: disabled)])],
 	[make_lint_lib=$enableval], [make_lint_lib=no])
 if test "x$make_lint_lib" != "xno" ; then
