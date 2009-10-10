@@ -339,7 +339,8 @@ main() {
     exit(m0 == 0 || r0 == 0 || c0 == 0 ? 0 : 1);
 }],
 		[MALLOC_ZERO_RETURNS_NULL=yes],
-		[MALLOC_ZERO_RETURNS_NULL=no])
+		[MALLOC_ZERO_RETURNS_NULL=no],
+		[MALLOC_ZERO_RETURNS_NULL=yes])
 fi
 AC_MSG_RESULT([$MALLOC_ZERO_RETURNS_NULL])
 
