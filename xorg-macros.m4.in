@@ -497,5 +497,20 @@ XORG_CWARNFLAGS
 XORG_STRICT_OPTION
 XORG_RELEASE_VERSION
 XORG_CHANGELOG
+XORG_INSTALL
 XORG_MANPAGE_SECTIONS
 ]) # XORG_DEFAULT_OPTIONS
+
+# XORG_INSTALL()
+# ----------------
+# Minimum version: 1.4.0
+#
+# Defines the variable INSTALL_CMD as the command to copy
+# INSTALL from $prefix/share/doc/util-macros.
+#
+AC_DEFUN([XORG_INSTALL], [
+INSTALL_CMD="if test -f "$prefix/share/doc/util-macros/INSTALL"; then \
+cp -f "$prefix/share/doc/util-macros/INSTALL" \$(top_srcdir); \
+else echo '$prefix/share/doc/util-macros/INSTALL cannot be found.' >&2; fi "
+AC_SUBST([INSTALL_CMD])
+]) # XORG_INSTALL
