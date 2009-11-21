@@ -509,8 +509,11 @@ XORG_MANPAGE_SECTIONS
 # INSTALL from $prefix/share/doc/util-macros.
 #
 AC_DEFUN([XORG_INSTALL], [
-INSTALL_CMD="if test -f "$prefix/share/doc/util-macros/INSTALL"; then \
-cp -f "$prefix/share/doc/util-macros/INSTALL" \$(top_srcdir); \
-else echo '$prefix/share/doc/util-macros/INSTALL cannot be found.' >&2; fi "
+AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+macros_docdir=$($PKG_CONFIG --print-errors --variable=docdir xorg-macros)
+INSTALL_CMD="(cp -f "$macros_docdir/INSTALL" \$(top_srcdir)/.INSTALL.tmp && \
+mv \$(top_srcdir)/.INSTALL.tmp \$(top_srcdir)/INSTALL) \
+|| (rm -f \$(top_srcdir)/.INSTALL.tmp; touch \$(top_srcdir)/INSTALL; \
+echo 'util-macros \"docdir\" from xorg-macros.pc not found: installing possibly empty INSTALL.' >&2)"
 AC_SUBST([INSTALL_CMD])
 ]) # XORG_INSTALL
