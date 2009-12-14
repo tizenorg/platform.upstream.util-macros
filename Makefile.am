@@ -29,7 +29,7 @@ dist_doc_DATA = INSTALL
 install-data-hook:
 	rm -f $(DESTDIR)$(aclocaldir)/xorgversion.m4
 
-pkgconfigdir = $(libdir)/pkgconfig
+pkgconfigdir = $(datadir)/pkgconfig
 pkgconfig_DATA = xorg-macros.pc
 
 EXTRA_DIST = xorg-macros.pc.in
