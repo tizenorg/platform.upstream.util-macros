@@ -40,6 +40,6 @@ m4_include([xorgversion.m4])
 XORG_RELEASE_VERSION
 XORG_CHANGELOG
 
-AC_CONFIG_FILES([xorg-macros.pc])
-AC_CONFIG_FILES([Makefile xorg-macros.m4:xorg-macros.m4.in:xorgversion.m4])
+AC_CONFIG_FILES([xorg-macros.pc
+                 Makefile xorg-macros.m4:xorg-macros.m4.in:xorgversion.m4])
 AC_OUTPUT
