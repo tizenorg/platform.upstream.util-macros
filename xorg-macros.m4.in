@@ -511,7 +511,7 @@ XORG_MANPAGE_SECTIONS
 #
 AC_DEFUN([XORG_INSTALL], [
 AC_REQUIRE([PKG_PROG_PKG_CONFIG])
-macros_docdir=$($PKG_CONFIG --print-errors --variable=docdir xorg-macros)
+macros_docdir=`$PKG_CONFIG --print-errors --variable=docdir xorg-macros`
 INSTALL_CMD="(cp -f "$macros_docdir/INSTALL" \$(top_srcdir)/.INSTALL.tmp && \
 mv \$(top_srcdir)/.INSTALL.tmp \$(top_srcdir)/INSTALL) \
 || (rm -f \$(top_srcdir)/.INSTALL.tmp; touch \$(top_srcdir)/INSTALL; \
