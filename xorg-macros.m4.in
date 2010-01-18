@@ -355,6 +355,108 @@ fi
 AM_CONDITIONAL([HAVE_XMLTO], [test "$have_xmlto" = yes])
 ]) # XORG_CHECK_XMLTO
 
+# XORG_WITH_ASCIIDOC
+# ----------------
+# Minimum version: 1.5.0
+#
+# Documentation tools are not always available on all platforms and sometimes
+# not at the appropriate level. This macro enables a module to test for the
+# presence of the tool and obtain it's path in separate variables. Coupled with
+# the --with-asciidoc option, it allows maximum flexibilty in making decisions
+# as whether or not to use the asciidoc package.
+#
+# Interface to module:
+# HAVE_ASCIIDOC: used in makefiles to conditionally generate documentation
+# ASCIIDOC:	 returns the path of the asciidoc program found
+#		 returns the path set by the user in the environment
+# --with-asciidoc: 'yes' user instructs the module to use asciidoc
+#		  'no' user instructs the module not to use asciidoc
+#
+# If the user sets the value of ASCIIDOC, AC_PATH_PROG skips testing the path.
+#
+AC_DEFUN([XORG_WITH_ASCIIDOC],[
+AC_ARG_VAR([ASCIIDOC], [Path to asciidoc command])
+AC_ARG_WITH(asciidoc,
+	AS_HELP_STRING([--with-asciidoc],
+	   [Use asciidoc to regenerate documentation (default: yes, if installed)]),
+	   [use_asciidoc=$withval], [use_asciidoc=auto])
+
+if test "x$use_asciidoc" = x"auto"; then
+   AC_PATH_PROG([ASCIIDOC], [asciidoc])
+   if test "x$ASCIIDOC" = "x"; then
+        AC_MSG_WARN([asciidoc not found - documentation targets will be skipped])
+	have_asciidoc=no
+   else
+        have_asciidoc=yes
+   fi
+elif test "x$use_asciidoc" = x"yes" ; then
+   AC_PATH_PROG([ASCIIDOC], [asciidoc])
+   if test "x$ASCIIDOC" = "x"; then
+        AC_MSG_ERROR([--with-asciidoc=yes specified but asciidoc not found in PATH])
+   fi
+   have_asciidoc=yes
+elif test "x$use_asciidoc" = x"no" ; then
+   if test "x$ASCIIDOC" != "x"; then
+      AC_MSG_WARN([ignoring ASCIIDOC environment variable since --with-asciidoc=no was specified])
+   fi
+   have_asciidoc=no
+else
+   AC_MSG_ERROR([--with-asciidoc expects 'yes' or 'no'])
+fi
+AM_CONDITIONAL([HAVE_ASCIIDOC], [test "$have_asciidoc" = yes])
+]) # XORG_CHECK_ASCIIDOC
+
+# XORG_WITH_DOXYGEN
+# ----------------
+# Minimum version: 1.5.0
+#
+# Documentation tools are not always available on all platforms and sometimes
+# not at the appropriate level. This macro enables a module to test for the
+# presence of the tool and obtain it's path in separate variables. Coupled with
+# the --with-doxygen option, it allows maximum flexibilty in making decisions
+# as whether or not to use the doxygen package.
+#
+# Interface to module:
+# HAVE_DOXYGEN: used in makefiles to conditionally generate documentation
+# DOXYGEN:	 returns the path of the doxygen program found
+#		 returns the path set by the user in the environment
+# --with-doxygen: 'yes' user instructs the module to use doxygen
+#		  'no' user instructs the module not to use doxygen
+#
+# If the user sets the value of DOXYGEN, AC_PATH_PROG skips testing the path.
+#
+AC_DEFUN([XORG_WITH_DOXYGEN],[
+AC_ARG_VAR([DOXYGEN], [Path to doxygen command])
+AC_ARG_WITH(doxygen,
+	AS_HELP_STRING([--with-doxygen],
+	   [Use doxygen to regenerate documentation (default: yes, if installed)]),
+	   [use_doxygen=$withval], [use_doxygen=auto])
+
+if test "x$use_doxygen" = x"auto"; then
+   AC_PATH_PROG([DOXYGEN], [doxygen])
+   if test "x$DOXYGEN" = "x"; then
+        AC_MSG_WARN([doxygen not found - documentation targets will be skipped])
+	have_doxygen=no
+   else
+        have_doxygen=yes
+   fi
+elif test "x$use_doxygen" = x"yes" ; then
+   AC_PATH_PROG([DOXYGEN], [doxygen])
+   if test "x$DOXYGEN" = "x"; then
+        AC_MSG_ERROR([--with-doxygen=yes specified but doxygen not found in PATH])
+   fi
+   have_doxygen=yes
+elif test "x$use_doxygen" = x"no" ; then
+   if test "x$DOXYGEN" != "x"; then
+      AC_MSG_WARN([ignoring DOXYGEN environment variable since --with-doxygen=no was specified])
+   fi
+   have_doxygen=no
+else
+   AC_MSG_ERROR([--with-doxygen expects 'yes' or 'no'])
+fi
+AM_CONDITIONAL([HAVE_DOXYGEN], [test "$have_doxygen" = yes])
+]) # XORG_CHECK_DOXYGEN
+
 # XORG_CHECK_MALLOC_ZERO
 # ----------------------
 # Minimum version: 1.0.0
