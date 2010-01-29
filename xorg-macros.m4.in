@@ -610,6 +610,43 @@ fi
 AM_CONDITIONAL([HAVE_PS2PDF], [test "$have_ps2pdf" = yes])
 ]) # XORG_WITH_PS2PDF
 
+# XORG_ENABLE_DOCS (enable_docs=yes)
+# ----------------
+# Minimum version: 1.6.0
+#
+# Documentation tools are not always available on all platforms and sometimes
+# not at the appropriate level. This macro enables a builder to skip all
+# documentation targets except traditional man pages.
+# Combined with the specific tool checking macros XORG_WITH_*, it provides
+# maximum flexibilty in controlling documentation building.
+# Refer to:
+# XORG_WITH_XMLTO         --with-xmlto
+# XORG_WITH_ASCIIDOC      --with-asciidoc
+# XORG_WITH_DOXYGEN       --with-doxygen
+# XORG_WITH_FOP           --with-fop
+# XORG_WITH_GROFF         --with-groff
+# XORG_WITH_PS2PDF        --with-ps2pdf
+#
+# Interface to module:
+# ENABLE_DOCS: 	  used in makefiles to conditionally generate documentation
+# --enable-docs: 'yes' user instructs the module to generate docs
+#		 'no' user instructs the module not to generate docs
+# parm1:	specify the default value, yes or no.
+#
+AC_DEFUN([XORG_ENABLE_DOCS],[
+default=$1
+if test "x$default" = x ; then
+  default="yes"
+fi
+AC_ARG_ENABLE(docs,
+	AS_HELP_STRING([--enable-docs],
+	   [Enable building the documentation (default: yes)]),
+	   [build_docs=$enableval], [build_docs=$default])
+AM_CONDITIONAL(ENABLE_DOCS, [test x$build_docs = xyes])
+AC_MSG_CHECKING([whether to build documentation])
+AC_MSG_RESULT([$build_docs])
+]) # XORG_ENABLE_DOCS
+
 # XORG_CHECK_MALLOC_ZERO
 # ----------------------
 # Minimum version: 1.0.0
