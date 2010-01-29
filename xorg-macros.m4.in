@@ -457,6 +457,159 @@ fi
 AM_CONDITIONAL([HAVE_DOXYGEN], [test "$have_doxygen" = yes])
 ]) # XORG_CHECK_DOXYGEN
 
+# XORG_WITH_GROFF
+# ----------------
+# Minimum version: 1.6.0
+#
+# Documentation tools are not always available on all platforms and sometimes
+# not at the appropriate level. This macro enables a module to test for the
+# presence of the tool and obtain it's path in separate variables. Coupled with
+# the --with-groff option, it allows maximum flexibilty in making decisions
+# as whether or not to use the groff package.
+#
+# Interface to module:
+# HAVE_GROFF: 	used in makefiles to conditionally generate documentation
+# GROFF:	returns the path of the groff program found
+#		returns the path set by the user in the environment
+# --with-groff:	'yes' user instructs the module to use groff
+#		'no' user instructs the module not to use groff
+#
+# If the user sets the value of GROFF, AC_PATH_PROG skips testing the path.
+#
+AC_DEFUN([XORG_WITH_GROFF],[
+AC_ARG_VAR([GROFF], [Path to groff command])
+AC_ARG_WITH(groff,
+	AS_HELP_STRING([--with-groff],
+	   [Use groff to regenerate documentation (default: yes, if installed)]),
+	   [use_groff=$withval], [use_groff=auto])
+
+if test "x$use_groff" = x"auto"; then
+   AC_PATH_PROG([GROFF], [groff])
+   if test "x$GROFF" = "x"; then
+        AC_MSG_WARN([groff not found - documentation targets will be skipped])
+	have_groff=no
+   else
+        have_groff=yes
+   fi
+elif test "x$use_groff" = x"yes" ; then
+   AC_PATH_PROG([GROFF], [groff])
+   if test "x$GROFF" = "x"; then
+        AC_MSG_ERROR([--with-groff=yes specified but groff not found in PATH])
+   fi
+   have_groff=yes
+elif test "x$use_groff" = x"no" ; then
+   if test "x$GROFF" != "x"; then
+      AC_MSG_WARN([ignoring GROFF environment variable since --with-groff=no was specified])
+   fi
+   have_groff=no
+else
+   AC_MSG_ERROR([--with-groff expects 'yes' or 'no'])
+fi
+AM_CONDITIONAL([HAVE_GROFF], [test "$have_groff" = yes])
+]) # XORG_WITH_GROFF
+
+# XORG_WITH_FOP
+# ----------------
+# Minimum version: 1.6.0
+#
+# Documentation tools are not always available on all platforms and sometimes
+# not at the appropriate level. This macro enables a module to test for the
+# presence of the tool and obtain it's path in separate variables. Coupled with
+# the --with-fop option, it allows maximum flexibilty in making decisions
+# as whether or not to use the fop package.
+#
+# Interface to module:
+# HAVE_FOP: 	used in makefiles to conditionally generate documentation
+# FOP:	 	returns the path of the fop program found
+#		returns the path set by the user in the environment
+# --with-fop: 	'yes' user instructs the module to use fop
+#		'no' user instructs the module not to use fop
+#
+# If the user sets the value of FOP, AC_PATH_PROG skips testing the path.
+#
+AC_DEFUN([XORG_WITH_FOP],[
+AC_ARG_VAR([FOP], [Path to fop command])
+AC_ARG_WITH(fop,
+	AS_HELP_STRING([--with-fop],
+	   [Use fop to regenerate documentation (default: yes, if installed)]),
+	   [use_fop=$withval], [use_fop=auto])
+
+if test "x$use_fop" = x"auto"; then
+   AC_PATH_PROG([FOP], [fop])
+   if test "x$FOP" = "x"; then
+        AC_MSG_WARN([fop not found - documentation targets will be skipped])
+	have_fop=no
+   else
+        have_fop=yes
+   fi
+elif test "x$use_fop" = x"yes" ; then
+   AC_PATH_PROG([FOP], [fop])
+   if test "x$FOP" = "x"; then
+        AC_MSG_ERROR([--with-fop=yes specified but fop not found in PATH])
+   fi
+   have_fop=yes
+elif test "x$use_fop" = x"no" ; then
+   if test "x$FOP" != "x"; then
+      AC_MSG_WARN([ignoring FOP environment variable since --with-fop=no was specified])
+   fi
+   have_fop=no
+else
+   AC_MSG_ERROR([--with-fop expects 'yes' or 'no'])
+fi
+AM_CONDITIONAL([HAVE_FOP], [test "$have_fop" = yes])
+]) # XORG_WITH_FOP
+
+# XORG_WITH_PS2PDF
+# ----------------
+# Minimum version: 1.6.0
+#
+# Documentation tools are not always available on all platforms and sometimes
+# not at the appropriate level. This macro enables a module to test for the
+# presence of the tool and obtain it's path in separate variables. Coupled with
+# the --with-ps2pdf option, it allows maximum flexibilty in making decisions
+# as whether or not to use the ps2pdf package.
+#
+# Interface to module:
+# HAVE_PS2PDF: 	used in makefiles to conditionally generate documentation
+# PS2PDF:	returns the path of the ps2pdf program found
+#		returns the path set by the user in the environment
+# --with-ps2pdf: 'yes' user instructs the module to use ps2pdf
+#		 'no' user instructs the module not to use ps2pdf
+#
+# If the user sets the value of PS2PDF, AC_PATH_PROG skips testing the path.
+#
+AC_DEFUN([XORG_WITH_PS2PDF],[
+AC_ARG_VAR([PS2PDF], [Path to ps2pdf command])
+AC_ARG_WITH(ps2pdf,
+	AS_HELP_STRING([--with-ps2pdf],
+	   [Use ps2pdf to regenerate documentation (default: yes, if installed)]),
+	   [use_ps2pdf=$withval], [use_ps2pdf=auto])
+
+if test "x$use_ps2pdf" = x"auto"; then
+   AC_PATH_PROG([PS2PDF], [ps2pdf])
+   if test "x$PS2PDF" = "x"; then
+        AC_MSG_WARN([ps2pdf not found - documentation targets will be skipped])
+	have_ps2pdf=no
+   else
+        have_ps2pdf=yes
+   fi
+elif test "x$use_ps2pdf" = x"yes" ; then
+   AC_PATH_PROG([PS2PDF], [ps2pdf])
+   if test "x$PS2PDF" = "x"; then
+        AC_MSG_ERROR([--with-ps2pdf=yes specified but ps2pdf not found in PATH])
+   fi
+   have_ps2pdf=yes
+elif test "x$use_ps2pdf" = x"no" ; then
+   if test "x$PS2PDF" != "x"; then
+      AC_MSG_WARN([ignoring PS2PDF environment variable since --with-ps2pdf=no was specified])
+   fi
+   have_ps2pdf=no
+else
+   AC_MSG_ERROR([--with-ps2pdf expects 'yes' or 'no'])
+fi
+AM_CONDITIONAL([HAVE_PS2PDF], [test "$have_ps2pdf" = yes])
+]) # XORG_WITH_PS2PDF
+
 # XORG_CHECK_MALLOC_ZERO
 # ----------------------
 # Minimum version: 1.0.0
