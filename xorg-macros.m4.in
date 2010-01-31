@@ -468,13 +468,23 @@ AM_CONDITIONAL([HAVE_DOXYGEN], [test "$have_doxygen" = yes])
 # as whether or not to use the groff package.
 #
 # Interface to module:
-# HAVE_GROFF: 	used in makefiles to conditionally generate documentation
-# GROFF:	returns the path of the groff program found
-#		returns the path set by the user in the environment
-# --with-groff:	'yes' user instructs the module to use groff
-#		'no' user instructs the module not to use groff
+# HAVE_GROFF:	 used in makefiles to conditionally generate documentation
+# HAVE_GROFF_MM: the memorandum macros (-mm) package
+# HAVE_GROFF_MS: the -ms macros package
+# GROFF:	 returns the path of the groff program found
+#		 returns the path set by the user in the environment
+# --with-groff:	 'yes' user instructs the module to use groff
+#		 'no' user instructs the module not to use groff
 #
 # If the user sets the value of GROFF, AC_PATH_PROG skips testing the path.
+#
+# OS and distros often splits groff in a basic and full package, the former
+# having the groff program and the later having devices, fonts and macros
+# Checking for the groff executable is not enough.
+#
+# If macros are missing, we cannot assume that groff is useless, so we don't
+# unset HAVE_GROFF or GROFF env variables.
+# HAVE_GROFF_?? can never be true while HAVE_GROFF is false.
 #
 AC_DEFUN([XORG_WITH_GROFF],[
 AC_ARG_VAR([GROFF], [Path to groff command])
@@ -505,7 +515,26 @@ elif test "x$use_groff" = x"no" ; then
 else
    AC_MSG_ERROR([--with-groff expects 'yes' or 'no'])
 fi
+# We have groff, test for the presence of the macro packages
+if test "x$have_groff" = x"yes"; then
+    AC_MSG_CHECKING([for ${GROFF} -ms macros])
+    if ${GROFF} -ms -I. /dev/null >/dev/null 2>&1 ; then
+        groff_ms_works=yes
+    else
+        groff_ms_works=no
+    fi
+    AC_MSG_RESULT([$groff_ms_works])
+    AC_MSG_CHECKING([for ${GROFF} -mm macros])
+    if ${GROFF} -mm -I. /dev/null >/dev/null 2>&1 ; then
+        groff_mm_works=yes
+    else
+        groff_mm_works=no
+    fi
+    AC_MSG_RESULT([$groff_mm_works])
+fi
 AM_CONDITIONAL([HAVE_GROFF], [test "$have_groff" = yes])
+AM_CONDITIONAL([HAVE_GROFF_MS], [test "$groff_ms_works" = yes])
+AM_CONDITIONAL([HAVE_GROFF_MM], [test "$groff_mm_works" = yes])
 ]) # XORG_WITH_GROFF
 
 # XORG_WITH_FOP
