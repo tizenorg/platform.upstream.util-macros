@@ -676,6 +676,76 @@ AC_MSG_CHECKING([whether to build documentation])
 AC_MSG_RESULT([$build_docs])
 ]) # XORG_ENABLE_DOCS
 
+# XORG_ENABLE_DEVEL_DOCS (enable_devel_docs=yes)
+# ----------------
+# Minimum version: 1.6.0
+#
+# This macro enables a builder to skip all developer documentation.
+# Combined with the specific tool checking macros XORG_WITH_*, it provides
+# maximum flexibilty in controlling documentation building.
+# Refer to:
+# XORG_WITH_XMLTO         --with-xmlto
+# XORG_WITH_ASCIIDOC      --with-asciidoc
+# XORG_WITH_DOXYGEN       --with-doxygen
+# XORG_WITH_FOP           --with-fop
+# XORG_WITH_GROFF         --with-groff
+# XORG_WITH_PS2PDF        --with-ps2pdf
+#
+# Interface to module:
+# ENABLE_DEVEL_DOCS:	used in makefiles to conditionally generate developer docs
+# --enable-devel-docs:	'yes' user instructs the module to generate developer docs
+#			'no' user instructs the module not to generate developer docs
+# parm1:		specify the default value, yes or no.
+#
+AC_DEFUN([XORG_ENABLE_DEVEL_DOCS],[
+devel_default=$1
+if test "x$devel_default" = x ; then
+  devel_default="yes"
+fi
+AC_ARG_ENABLE(devel-docs,
+	AS_HELP_STRING([--enable-devel-docs],
+	   [Enable building the developer documentation (default: yes)]),
+	   [build_devel_docs=$enableval], [build_devel_docs=$devel_default])
+AM_CONDITIONAL(ENABLE_DEVEL_DOCS, [test x$build_devel_docs = xyes])
+AC_MSG_CHECKING([whether to build developer documentation])
+AC_MSG_RESULT([$build_devel_docs])
+]) # XORG_ENABLE_DEVEL_DOCS
+
+# XORG_ENABLE_SPECS (enable_specs=yes)
+# ----------------
+# Minimum version: 1.6.0
+#
+# This macro enables a builder to skip all functional specification targets.
+# Combined with the specific tool checking macros XORG_WITH_*, it provides
+# maximum flexibilty in controlling documentation building.
+# Refer to:
+# XORG_WITH_XMLTO         --with-xmlto
+# XORG_WITH_ASCIIDOC      --with-asciidoc
+# XORG_WITH_DOXYGEN       --with-doxygen
+# XORG_WITH_FOP           --with-fop
+# XORG_WITH_GROFF         --with-groff
+# XORG_WITH_PS2PDF        --with-ps2pdf
+#
+# Interface to module:
+# ENABLE_SPECS:		used in makefiles to conditionally generate specs
+# --enable-specs:	'yes' user instructs the module to generate specs
+#			'no' user instructs the module not to generate specs
+# parm1:		specify the default value, yes or no.
+#
+AC_DEFUN([XORG_ENABLE_SPECS],[
+spec_default=$1
+if test "x$spec_default" = x ; then
+  spec_default="yes"
+fi
+AC_ARG_ENABLE(specs,
+	AS_HELP_STRING([--enable-specs],
+	   [Enable building the specs (default: yes)]),
+	   [build_specs=$enableval], [build_specs=$spec_default])
+AM_CONDITIONAL(ENABLE_SPECS, [test x$build_specs = xyes])
+AC_MSG_CHECKING([whether to build functional specifications])
+AC_MSG_RESULT([$build_specs])
+]) # XORG_ENABLE_SPECS
+
 # XORG_CHECK_MALLOC_ZERO
 # ----------------------
 # Minimum version: 1.0.0
