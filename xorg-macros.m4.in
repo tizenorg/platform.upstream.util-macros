@@ -355,7 +355,7 @@ fi
 AM_CONDITIONAL([HAVE_XMLTO], [test "$have_xmlto" = yes])
 ]) # XORG_CHECK_XMLTO
 
-# XORG_WITH_ASCIIDOC
+# XORG_WITH_ASCIIDOC([MIN-VERSION])
 # ----------------
 # Minimum version: 1.5.0
 #
@@ -403,8 +403,22 @@ elif test "x$use_asciidoc" = x"no" ; then
 else
    AC_MSG_ERROR([--with-asciidoc expects 'yes' or 'no'])
 fi
+m4_ifval([$1],
+[if test "$have_asciidoc" = yes; then
+    # scrape the asciidoc version
+    AC_MSG_CHECKING([the asciidoc version])
+    asciidoc_version=`$ASCIIDOC --version 2>/dev/null | cut -d' ' -f2`
+    AC_MSG_RESULT([$asciidoc_version])
+    AS_VERSION_COMPARE([$asciidoc_version], [$1],
+        [if test "x$use_asciidoc" = xauto; then
+            AC_MSG_WARN([asciidoc version $asciidoc_version found, but $1 needed])
+            have_asciidoc=no
+        else
+            AC_MSG_ERROR([asciidoc version $asciidoc_version found, but $1 needed])
+        fi])
+fi])
 AM_CONDITIONAL([HAVE_ASCIIDOC], [test "$have_asciidoc" = yes])
-]) # XORG_CHECK_ASCIIDOC
+]) # XORG_WITH_ASCIIDOC
 
 # XORG_WITH_DOXYGEN
 # ----------------
