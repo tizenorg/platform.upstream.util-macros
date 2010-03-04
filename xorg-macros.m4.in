@@ -304,7 +304,7 @@ AC_SUBST(MAKE_PDF)
 AC_SUBST(MAKE_HTML)
 ]) # XORG_CHECK_DOCBOOK
 
-# XORG_WITH_XMLTO
+# XORG_WITH_XMLTO([MIN-VERSION])
 # ----------------
 # Minimum version: 1.5.0
 #
@@ -352,8 +352,22 @@ elif test "x$use_xmlto" = x"no" ; then
 else
    AC_MSG_ERROR([--with-xmlto expects 'yes' or 'no'])
 fi
+m4_ifval([$1],
+[if test "$have_xmlto" = yes; then
+    # scrape the xmlto version
+    AC_MSG_CHECKING([the xmlto version])
+    xmlto_version=`$XMLTO --version 2>/dev/null | cut -d' ' -f3`
+    AC_MSG_RESULT([$xmlto_version])
+    AS_VERSION_COMPARE([$xmlto_version], [$1],
+        [if test "x$use_xmlto" = xauto; then
+            AC_MSG_WARN([xmlto version $xmlto_version found, but $1 needed])
+            have_xmlto=no
+        else
+            AC_MSG_ERROR([xmlto version $xmlto_version found, but $1 needed])
+        fi])
+fi])
 AM_CONDITIONAL([HAVE_XMLTO], [test "$have_xmlto" = yes])
-]) # XORG_CHECK_XMLTO
+]) # XORG_WITH_XMLTO
 
 # XORG_WITH_ASCIIDOC([MIN-VERSION])
 # ----------------
