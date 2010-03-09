@@ -434,8 +434,8 @@ fi])
 AM_CONDITIONAL([HAVE_ASCIIDOC], [test "$have_asciidoc" = yes])
 ]) # XORG_WITH_ASCIIDOC
 
-# XORG_WITH_DOXYGEN
-# ----------------
+# XORG_WITH_DOXYGEN([MIN-VERSION])
+# --------------------------------
 # Minimum version: 1.5.0
 #
 # Documentation tools are not always available on all platforms and sometimes
@@ -482,8 +482,22 @@ elif test "x$use_doxygen" = x"no" ; then
 else
    AC_MSG_ERROR([--with-doxygen expects 'yes' or 'no'])
 fi
+m4_ifval([$1],
+[if test "$have_doxygen" = yes; then
+    # scrape the doxygen version
+    AC_MSG_CHECKING([the doxygen version])
+    doxygen_version=`$DOXYGEN --version 2>/dev/null`
+    AC_MSG_RESULT([$doxygen_version])
+    AS_VERSION_COMPARE([$doxygen_version], [$1],
+        [if test "x$use_doxygen" = xauto; then
+            AC_MSG_WARN([doxygen version $doxygen_version found, but $1 needed])
+            have_doxygen=no
+        else
+            AC_MSG_ERROR([doxygen version $doxygen_version found, but $1 needed])
+        fi])
+fi])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test "$have_doxygen" = yes])
-]) # XORG_CHECK_DOXYGEN
+]) # XORG_WITH_DOXYGEN
 
 # XORG_WITH_GROFF
 # ----------------
