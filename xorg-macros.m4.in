@@ -201,7 +201,7 @@ fi
 AC_PATH_PROG(LINUXDOC, linuxdoc)
 AC_PATH_PROG(PS2PDF, ps2pdf)
 
-AC_MSG_CHECKING([Whether to build documentation])
+AC_MSG_CHECKING([whether to build documentation])
 
 if test x$HAVE_DEFS_ENT != x && test x$LINUXDOC != x ; then
    BUILDDOC=yes
@@ -213,7 +213,7 @@ AM_CONDITIONAL(BUILD_LINUXDOC, [test x$BUILDDOC = xyes])
 
 AC_MSG_RESULT([$BUILDDOC])
 
-AC_MSG_CHECKING([Whether to build pdf documentation])
+AC_MSG_CHECKING([whether to build pdf documentation])
 
 if test x$PS2PDF != x && test x$BUILD_PDFDOC != xno; then
    BUILDPDFDOC=yes
@@ -261,7 +261,7 @@ AC_PATH_PROG(DOCBOOKPDF, docbook2pdf)
 AC_PATH_PROG(DOCBOOKHTML, docbook2html)
 AC_PATH_PROG(DOCBOOKTXT, docbook2txt)
 
-AC_MSG_CHECKING([Whether to build text documentation])
+AC_MSG_CHECKING([whether to build text documentation])
 if test x$HAVE_DEFS_ENT != x && test x$DOCBOOKTXT != x &&
    test x$BUILD_TXTDOC != xno; then
 	BUILDTXTDOC=yes
@@ -269,7 +269,7 @@ fi
 AM_CONDITIONAL(BUILD_TXTDOC, [test x$BUILDTXTDOC = xyes])
 AC_MSG_RESULT([$BUILDTXTDOC])
 
-AC_MSG_CHECKING([Whether to build PDF documentation])
+AC_MSG_CHECKING([whether to build PDF documentation])
 if test x$HAVE_DEFS_ENT != x && test x$DOCBOOKPDF != x &&
    test x$BUILD_PDFDOC != xno; then
 	BUILDPDFDOC=yes
@@ -277,7 +277,7 @@ fi
 AM_CONDITIONAL(BUILD_PDFDOC, [test x$BUILDPDFDOC = xyes])
 AC_MSG_RESULT([$BUILDPDFDOC])
 
-AC_MSG_CHECKING([Whether to build PostScript documentation])
+AC_MSG_CHECKING([whether to build PostScript documentation])
 if test x$HAVE_DEFS_ENT != x && test x$DOCBOOKPS != x &&
    test x$BUILD_PSDOC != xno; then
 	BUILDPSDOC=yes
@@ -285,7 +285,7 @@ fi
 AM_CONDITIONAL(BUILD_PSDOC, [test x$BUILDPSDOC = xyes])
 AC_MSG_RESULT([$BUILDPSDOC])
 
-AC_MSG_CHECKING([Whether to build HTML documentation])
+AC_MSG_CHECKING([whether to build HTML documentation])
 if test x$HAVE_DEFS_ENT != x && test x$DOCBOOKHTML != x &&
    test x$BUILD_HTMLDOC != xno; then
 	BUILDHTMLDOC=yes
