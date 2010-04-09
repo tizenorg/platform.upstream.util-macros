@@ -213,9 +213,9 @@ AC_SUBST(XORG_SGML_PATH)
 # with the AM_CONDITIONAL "BUILD_LINUXDOC"
 AC_DEFUN([XORG_CHECK_LINUXDOC],[
 AC_REQUIRE([XORG_CHECK_SGML_DOCTOOLS])
+AC_REQUIRE([XORG_WITH_PS2PDF])
 
 AC_PATH_PROG(LINUXDOC, linuxdoc)
-AC_PATH_PROG(PS2PDF, ps2pdf)
 
 AC_MSG_CHECKING([whether to build documentation])
 
@@ -231,7 +231,7 @@ AC_MSG_RESULT([$BUILDDOC])
 
 AC_MSG_CHECKING([whether to build pdf documentation])
 
-if test x$PS2PDF != x && test x$BUILD_PDFDOC != xno; then
+if test x$have_ps2pdf != xno && test x$BUILD_PDFDOC != xno; then
    BUILDPDFDOC=yes
 else
    BUILDPDFDOC=no
