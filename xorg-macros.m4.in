@@ -178,21 +178,23 @@ AC_SUBST([DRIVER_MAN_DIR])
 AC_SUBST([ADMIN_MAN_DIR])
 ]) # XORG_MANPAGE_SECTIONS
 
-# XORG_CHECK_SGML_DOCTOOLS
+# XORG_CHECK_SGML_DOCTOOLS([MIN-VERSION])
 # ------------------------
 # Minimum version: 1.7.0
 #
 # Defines the variable XORG_SGML_PATH containing the location of X11/defs.ent
 # provided by xorg-sgml-doctools, if installed.
 AC_DEFUN([XORG_CHECK_SGML_DOCTOOLS],[
-AC_MSG_CHECKING([for X.Org SGML entities])
+AC_MSG_CHECKING([for X.Org SGML entities m4_ifval([$1],[>= $1])])
 XORG_SGML_PATH=
-PKG_CHECK_EXISTS([xorg-sgml-doctools],
+PKG_CHECK_EXISTS([xorg-sgml-doctools m4_ifval([$1],[>= $1])],
     [XORG_SGML_PATH=`$PKG_CONFIG --variable=sgmlrootdir xorg-sgml-doctools`],
-    [if test x"$cross_compiling" != x"yes" ; then
-        AC_CHECK_FILE([$prefix/share/sgml/X11/defs.ent],
-                      [XORG_SGML_PATH=$prefix/share/sgml])
-     fi])
+    [m4_ifval([$1],[:],
+        [if test x"$cross_compiling" != x"yes" ; then
+            AC_CHECK_FILE([$prefix/share/sgml/X11/defs.ent],
+                          [XORG_SGML_PATH=$prefix/share/sgml])
+         fi])
+    ])
 
 if test "x$XORG_SGML_PATH" != "x" ; then
    AC_MSG_RESULT([$XORG_SGML_PATH])
