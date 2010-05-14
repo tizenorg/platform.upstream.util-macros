@@ -930,7 +930,7 @@ AM_CONDITIONAL(MAKE_LINT_LIB, [test x$make_lint_lib != xno])
 # Defines CWARNFLAGS to enable C compiler warnings.
 #
 AC_DEFUN([XORG_CWARNFLAGS], [
-AC_REQUIRE([AC_PROG_CC])
+AC_REQUIRE([AC_PROG_CC_C99])
 if  test "x$GCC" = xyes ; then
     CWARNFLAGS="-Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes \
 -Wmissing-declarations -Wnested-externs -fno-strict-aliasing \
@@ -955,7 +955,7 @@ AC_SUBST(CWARNFLAGS)
 #
 # Add configure option to enable strict compilation
 AC_DEFUN([XORG_STRICT_OPTION], [
-AC_REQUIRE([AC_PROG_CC])
+# If the module's configure.ac calls AC_PROG_CC later on, CC gets set to C89
 AC_REQUIRE([AC_PROG_CC_C99])
 AC_REQUIRE([XORG_CWARNFLAGS])
 
