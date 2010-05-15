@@ -855,38 +855,69 @@ AC_SUBST([XTMALLOC_ZERO_CFLAGS])
 # ----------------
 # Minimum version: 1.1.0
 #
-# Sets up flags for source checkers such as lint and sparse if --with-lint
-# is specified.   (Use --with-lint=sparse for sparse.)
-# Sets $LINT to name of source checker passed with --with-lint (default: lint)
-# Sets $LINT_FLAGS to flags to pass to source checker
-# Sets LINT automake conditional if enabled (default: disabled)
+# This macro enables the use of a tool that flags some suspicious and
+# non-portable constructs (likely to be bugs) in C language source code.
+# It will attempt to locate the tool and use appropriate options.
+# There are various lint type tools on different platforms.
+#
+# Interface to module:
+# LINT:		returns the path to the tool found on the platform
+#		or the value set to LINT on the configure cmd line
+#		also an Automake conditional
+# LINT_FLAGS:	an Automake variable with appropriate flags
+#
+# --with-lint:	'yes' user instructs the module to use lint
+#		'no' user instructs the module not to use lint (default)
+#
+# If the user sets the value of LINT, AC_PATH_PROG skips testing the path.
+# If the user sets the value of LINT_FLAGS, they are used verbatim.
 #
 AC_DEFUN([XORG_WITH_LINT],[
 
-# Allow checking code with lint, sparse, etc.
+AC_ARG_VAR([LINT], [Path to a lint-style command])
+AC_ARG_VAR([LINT_FLAGS], [Flags for the lint-style command])
 AC_ARG_WITH(lint, [AS_HELP_STRING([--with-lint],
 		[Use a lint-style source code checker (default: disabled)])],
 		[use_lint=$withval], [use_lint=no])
-if test "x$use_lint" = "xyes" ; then
-	LINT="lint"
+
+# Obtain platform specific info like program name and options
+# The lint program on FreeBSD and NetBSD is different from the one on Solaris
+case $host_os in
+  *linux* | *openbsd* | kfreebsd*-gnu | darwin* | cygwin*)
+	lint_name=splint
+	lint_options="-badflag"
+	;;
+  *freebsd* | *netbsd*)
+	lint_name=lint
+	lint_options="-u -b"
+	;;
+  *solaris*)
+	lint_name=lint
+	lint_options="-u -b -h -erroff=E_INDISTING_FROM_TRUNC2"
+	;;
+esac
+
+# Test for the presence of the program (either guessed by the code or spelled out by the user)
+if test "x$use_lint" = x"yes" ; then
+   AC_PATH_PROG([LINT], [$lint_name])
+   if test "x$LINT" = "x"; then
+        AC_MSG_ERROR([--with-lint=yes specified but lint-style tool not found in PATH])
+   fi
+elif test "x$use_lint" = x"no" ; then
+   if test "x$LINT" != "x"; then
+      AC_MSG_WARN([ignoring LINT environment variable since --with-lint=no was specified])
+   fi
 else
-	LINT="$use_lint"
-fi
-if test "x$LINT_FLAGS" = "x" -a "x$LINT" != "xno" ; then
-    case $LINT in
-	lint|*/lint)
-	    case $host_os in
-		solaris*)
-			LINT_FLAGS="-u -b -h -erroff=E_INDISTING_FROM_TRUNC2"
-			;;
-	    esac
-	    ;;
-    esac
+   AC_MSG_ERROR([--with-lint expects 'yes' or 'no'. Use LINT variable to specify path.])
 fi
 
-AC_SUBST(LINT)
-AC_SUBST(LINT_FLAGS)
-AM_CONDITIONAL(LINT, [test x$LINT != xno])
+# User supplied flags override default flags
+if test "x$LINT_FLAGS" != "x"; then
+   lint_options=$LINT_FLAGS
+fi
+
+AC_SUBST([LINT_FLAGS],[$lint_options])
+AM_CONDITIONAL(LINT, [test "x$LINT" != x])
 
 ]) # XORG_WITH_LINT
 
