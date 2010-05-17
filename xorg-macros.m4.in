@@ -105,6 +105,7 @@ AC_SUBST(RAWCPPFLAGS)
 # on this OS - replaces *ManSuffix settings in old Imake *.cf per-os files.
 # Not sure if there's any better way than just hardcoding by OS name.
 # Override default settings by setting environment variables
+# Added MAN_SUBSTS in version 1.8
 
 AC_DEFUN([XORG_MANPAGE_SECTIONS],[
 AC_REQUIRE([AC_CANONICAL_HOST])
@@ -176,6 +177,23 @@ AC_SUBST([FILE_MAN_DIR])
 AC_SUBST([MISC_MAN_DIR])
 AC_SUBST([DRIVER_MAN_DIR])
 AC_SUBST([ADMIN_MAN_DIR])
+
+XORG_MAN_PAGE="X Version 11"
+AC_SUBST([XORG_MAN_PAGE])
+MAN_SUBSTS="\
+	-e 's|__vendorversion__|\"\$(PACKAGE_STRING)\" \"\$(XORG_MAN_PAGE)\"|' \
+	-e 's|__xorgversion__|\"\$(PACKAGE_STRING)\" \"\$(XORG_MAN_PAGE)\"|' \
+	-e 's|__xservername__|Xorg|g' \
+	-e 's|__xconfigfile__|xorg.conf|g' \
+	-e 's|__projectroot__|\$(prefix)|g' \
+	-e 's|__appmansuffix__|\$(APP_MAN_SUFFIX)|g' \
+	-e 's|__drivermansuffix__|\$(DRIVER_MAN_SUFFIX)|g' \
+	-e 's|__adminmansuffix__|\$(ADMIN_MAN_SUFFIX)|g' \
+	-e 's|__libmansuffix__|\$(LIB_MAN_SUFFIX)|g' \
+	-e 's|__miscmansuffix__|\$(MISC_MAN_SUFFIX)|g' \
+	-e 's|__filemansuffix__|\$(FILE_MAN_SUFFIX)|g'"
+AC_SUBST([MAN_SUBSTS])
+
 ]) # XORG_MANPAGE_SECTIONS
 
 # XORG_CHECK_SGML_DOCTOOLS([MIN-VERSION])
