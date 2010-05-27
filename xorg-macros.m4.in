@@ -106,9 +106,11 @@ AC_SUBST(RAWCPPFLAGS)
 # Not sure if there's any better way than just hardcoding by OS name.
 # Override default settings by setting environment variables
 # Added MAN_SUBSTS in version 1.8
+# Added AC_PROG_SED in version 1.8
 
 AC_DEFUN([XORG_MANPAGE_SECTIONS],[
 AC_REQUIRE([AC_CANONICAL_HOST])
+AC_REQUIRE([AC_PROG_SED])
 
 if test x$APP_MAN_SUFFIX = x    ; then
     APP_MAN_SUFFIX=1
