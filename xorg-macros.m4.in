@@ -355,6 +355,10 @@ AC_SUBST(MAKE_HTML)
 # --with-xmlto:	'yes' user instructs the module to use xmlto
 #		'no' user instructs the module not to use xmlto
 #
+# Added in version 1.10.0
+# HAVE_XMLTO_TEXT: used in makefiles to conditionally generate text documentation
+#                  xmlto for text output requires either lynx, links, or w3m browsers
+#
 # If the user sets the value of XMLTO, AC_PATH_PROG skips testing the path.
 #
 AC_DEFUN([XORG_WITH_XMLTO],[
@@ -386,6 +390,8 @@ elif test "x$use_xmlto" = x"no" ; then
 else
    AC_MSG_ERROR([--with-xmlto expects 'yes' or 'no'])
 fi
+
+# Test for a minimum version of xmlto, if provided.
 m4_ifval([$1],
 [if test "$have_xmlto" = yes; then
     # scrape the xmlto version
@@ -400,6 +406,17 @@ m4_ifval([$1],
             AC_MSG_ERROR([xmlto version $xmlto_version found, but $1 needed])
         fi])
 fi])
+
+# Test for the ability of xmlto to generate a text target
+have_xmlto_text=no
+cat > conftest.xml << "EOF"
+EOF
+AS_IF([test "$have_xmlto" = yes],
+      [AS_IF([$XMLTO --skip-validation txt conftest.xml >/dev/null 2>&1],
+             [have_xmlto_text=yes],
+             [AC_MSG_WARN([xmlto cannot generate text format, this format skipped])])])
+rm -f conftest.xml
+AM_CONDITIONAL([HAVE_XMLTO_TEXT], [test $have_xmlto_text = yes])
 AM_CONDITIONAL([HAVE_XMLTO], [test "$have_xmlto" = yes])
 ]) # XORG_WITH_XMLTO
 
