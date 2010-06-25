@@ -216,13 +216,20 @@ PKG_CHECK_EXISTS([xorg-sgml-doctools m4_ifval([$1],[>= $1])],
          fi])
     ])
 
+# Define variables STYLESHEET_SRCDIR and XSL_STYLESHEET containing
+# the path and the name of the doc stylesheet
 if test "x$XORG_SGML_PATH" != "x" ; then
    AC_MSG_RESULT([$XORG_SGML_PATH])
+   STYLESHEET_SRCDIR=$XORG_SGML_PATH/X11
+   XSL_STYLESHEET=$STYLESHEET_SRCDIR/xorg.xsl
 else
    AC_MSG_RESULT([no])
 fi
 
 AC_SUBST(XORG_SGML_PATH)
+AC_SUBST(STYLESHEET_SRCDIR)
+AC_SUBST(XSL_STYLESHEET)
+AM_CONDITIONAL([HAVE_STYLESHEETS], [test "x$XSL_STYLESHEET" != "x"])
 ]) # XORG_CHECK_SGML_DOCTOOLS
 
 # XORG_CHECK_LINUXDOC
