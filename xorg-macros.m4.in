@@ -787,14 +787,12 @@ AM_CONDITIONAL([HAVE_PS2PDF], [test "$have_ps2pdf" = yes])
 # parm1:	specify the default value, yes or no.
 #
 AC_DEFUN([XORG_ENABLE_DOCS],[
-default=$1
-if test "x$default" = x ; then
-  default="yes"
-fi
+m4_define([default], m4_default([$1], [yes]))
 AC_ARG_ENABLE(docs,
 	AS_HELP_STRING([--enable-docs],
-	   [Enable building the documentation (default: yes)]),
-	   [build_docs=$enableval], [build_docs=$default])
+	   [Enable building the documentation (default: ]default[)]),
+	   [build_docs=$enableval], [build_docs=]default)
+m4_undefine([default])
 AM_CONDITIONAL(ENABLE_DOCS, [test x$build_docs = xyes])
 AC_MSG_CHECKING([whether to build documentation])
 AC_MSG_RESULT([$build_docs])
@@ -822,14 +820,12 @@ AC_MSG_RESULT([$build_docs])
 # parm1:		specify the default value, yes or no.
 #
 AC_DEFUN([XORG_ENABLE_DEVEL_DOCS],[
-devel_default=$1
-if test "x$devel_default" = x ; then
-  devel_default="yes"
-fi
+m4_define([devel_default], m4_default([$1], [yes]))
 AC_ARG_ENABLE(devel-docs,
 	AS_HELP_STRING([--enable-devel-docs],
-	   [Enable building the developer documentation (default: yes)]),
-	   [build_devel_docs=$enableval], [build_devel_docs=$devel_default])
+	   [Enable building the developer documentation (default: ]devel_default[)]),
+	   [build_devel_docs=$enableval], [build_devel_docs=]devel_default)
+m4_undefine([devel_default])
 AM_CONDITIONAL(ENABLE_DEVEL_DOCS, [test x$build_devel_docs = xyes])
 AC_MSG_CHECKING([whether to build developer documentation])
 AC_MSG_RESULT([$build_devel_docs])
@@ -857,14 +853,12 @@ AC_MSG_RESULT([$build_devel_docs])
 # parm1:		specify the default value, yes or no.
 #
 AC_DEFUN([XORG_ENABLE_SPECS],[
-spec_default=$1
-if test "x$spec_default" = x ; then
-  spec_default="yes"
-fi
+m4_define([spec_default], m4_default([$1], [yes]))
 AC_ARG_ENABLE(specs,
 	AS_HELP_STRING([--enable-specs],
-	   [Enable building the specs (default: yes)]),
-	   [build_specs=$enableval], [build_specs=$spec_default])
+	   [Enable building the specs (default: ]spec_default[)]),
+	   [build_specs=$enableval], [build_specs=]spec_default)
+m4_undefine([spec_default])
 AM_CONDITIONAL(ENABLE_SPECS, [test x$build_specs = xyes])
 AC_MSG_CHECKING([whether to build functional specifications])
 AC_MSG_RESULT([$build_specs])
