@@ -346,7 +346,7 @@ AC_SUBST(MAKE_PDF)
 AC_SUBST(MAKE_HTML)
 ]) # XORG_CHECK_DOCBOOK
 
-# XORG_WITH_XMLTO([MIN-VERSION])
+# XORG_WITH_XMLTO([MIN-VERSION], [DEFAULT])
 # ----------------
 # Minimum version: 1.5.0
 #
@@ -354,7 +354,8 @@ AC_SUBST(MAKE_HTML)
 # not at the appropriate level. This macro enables a module to test for the
 # presence of the tool and obtain it's path in separate variables. Coupled with
 # the --with-xmlto option, it allows maximum flexibilty in making decisions
-# as whether or not to use the xmlto package.
+# as whether or not to use the xmlto package. When DEFAULT is not specified,
+# --with-xmlto assumes 'auto'.
 #
 # Interface to module:
 # HAVE_XMLTO: 	used in makefiles to conditionally generate documentation
@@ -371,10 +372,12 @@ AC_SUBST(MAKE_HTML)
 #
 AC_DEFUN([XORG_WITH_XMLTO],[
 AC_ARG_VAR([XMLTO], [Path to xmlto command])
+m4_define([_defopt], m4_default([$2], [auto]))
 AC_ARG_WITH(xmlto,
 	AS_HELP_STRING([--with-xmlto],
-	   [Use xmlto to regenerate documentation (default: yes, if installed)]),
-	   [use_xmlto=$withval], [use_xmlto=auto])
+	   [Use xmlto to regenerate documentation (default: ]_defopt[)]),
+	   [use_xmlto=$withval], [use_xmlto=]_defopt)
+m4_undefine([_defopt])
 
 if test "x$use_xmlto" = x"auto"; then
    AC_PATH_PROG([XMLTO], [xmlto])
@@ -428,7 +431,7 @@ AM_CONDITIONAL([HAVE_XMLTO_TEXT], [test $have_xmlto_text = yes])
 AM_CONDITIONAL([HAVE_XMLTO], [test "$have_xmlto" = yes])
 ]) # XORG_WITH_XMLTO
 
-# XORG_WITH_ASCIIDOC([MIN-VERSION])
+# XORG_WITH_ASCIIDOC([MIN-VERSION], [DEFAULT])
 # ----------------
 # Minimum version: 1.5.0
 #
@@ -436,7 +439,8 @@ AM_CONDITIONAL([HAVE_XMLTO], [test "$have_xmlto" = yes])
 # not at the appropriate level. This macro enables a module to test for the
 # presence of the tool and obtain it's path in separate variables. Coupled with
 # the --with-asciidoc option, it allows maximum flexibilty in making decisions
-# as whether or not to use the asciidoc package.
+# as whether or not to use the asciidoc package. When DEFAULT is not specified,
+# --with-asciidoc assumes 'auto'.
 #
 # Interface to module:
 # HAVE_ASCIIDOC: used in makefiles to conditionally generate documentation
@@ -449,10 +453,12 @@ AM_CONDITIONAL([HAVE_XMLTO], [test "$have_xmlto" = yes])
 #
 AC_DEFUN([XORG_WITH_ASCIIDOC],[
 AC_ARG_VAR([ASCIIDOC], [Path to asciidoc command])
+m4_define([_defopt], m4_default([$2], [auto]))
 AC_ARG_WITH(asciidoc,
 	AS_HELP_STRING([--with-asciidoc],
-	   [Use asciidoc to regenerate documentation (default: yes, if installed)]),
-	   [use_asciidoc=$withval], [use_asciidoc=auto])
+	   [Use asciidoc to regenerate documentation (default: ]_defopt[)]),
+	   [use_asciidoc=$withval], [use_asciidoc=]_defopt)
+m4_undefine([_defopt])
 
 if test "x$use_asciidoc" = x"auto"; then
    AC_PATH_PROG([ASCIIDOC], [asciidoc])
@@ -493,7 +499,7 @@ fi])
 AM_CONDITIONAL([HAVE_ASCIIDOC], [test "$have_asciidoc" = yes])
 ]) # XORG_WITH_ASCIIDOC
 
-# XORG_WITH_DOXYGEN([MIN-VERSION])
+# XORG_WITH_DOXYGEN([MIN-VERSION], [DEFAULT])
 # --------------------------------
 # Minimum version: 1.5.0
 #
@@ -501,7 +507,8 @@ AM_CONDITIONAL([HAVE_ASCIIDOC], [test "$have_asciidoc" = yes])
 # not at the appropriate level. This macro enables a module to test for the
 # presence of the tool and obtain it's path in separate variables. Coupled with
 # the --with-doxygen option, it allows maximum flexibilty in making decisions
-# as whether or not to use the doxygen package.
+# as whether or not to use the doxygen package. When DEFAULT is not specified,
+# --with-doxygen assumes 'auto'.
 #
 # Interface to module:
 # HAVE_DOXYGEN: used in makefiles to conditionally generate documentation
@@ -514,10 +521,12 @@ AM_CONDITIONAL([HAVE_ASCIIDOC], [test "$have_asciidoc" = yes])
 #
 AC_DEFUN([XORG_WITH_DOXYGEN],[
 AC_ARG_VAR([DOXYGEN], [Path to doxygen command])
+m4_define([_defopt], m4_default([$2], [auto]))
 AC_ARG_WITH(doxygen,
 	AS_HELP_STRING([--with-doxygen],
-	   [Use doxygen to regenerate documentation (default: yes, if installed)]),
-	   [use_doxygen=$withval], [use_doxygen=auto])
+	   [Use doxygen to regenerate documentation (default: ]_defopt[)]),
+	   [use_doxygen=$withval], [use_doxygen=]_defopt)
+m4_undefine([_defopt])
 
 if test "x$use_doxygen" = x"auto"; then
    AC_PATH_PROG([DOXYGEN], [doxygen])
@@ -558,7 +567,7 @@ fi])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test "$have_doxygen" = yes])
 ]) # XORG_WITH_DOXYGEN
 
-# XORG_WITH_GROFF
+# XORG_WITH_GROFF([DEFAULT])
 # ----------------
 # Minimum version: 1.6.0
 #
@@ -566,7 +575,8 @@ AM_CONDITIONAL([HAVE_DOXYGEN], [test "$have_doxygen" = yes])
 # not at the appropriate level. This macro enables a module to test for the
 # presence of the tool and obtain it's path in separate variables. Coupled with
 # the --with-groff option, it allows maximum flexibilty in making decisions
-# as whether or not to use the groff package.
+# as whether or not to use the groff package. When DEFAULT is not specified,
+# --with-groff assumes 'auto'.
 #
 # Interface to module:
 # HAVE_GROFF:	 used in makefiles to conditionally generate documentation
@@ -595,10 +605,12 @@ AM_CONDITIONAL([HAVE_DOXYGEN], [test "$have_doxygen" = yes])
 #
 AC_DEFUN([XORG_WITH_GROFF],[
 AC_ARG_VAR([GROFF], [Path to groff command])
+m4_define([_defopt], m4_default([$1], [auto]))
 AC_ARG_WITH(groff,
 	AS_HELP_STRING([--with-groff],
-	   [Use groff to regenerate documentation (default: yes, if installed)]),
-	   [use_groff=$withval], [use_groff=auto])
+	   [Use groff to regenerate documentation (default: ]_defopt[)]),
+	   [use_groff=$withval], [use_groff=]_defopt)
+m4_undefine([_defopt])
 
 if test "x$use_groff" = x"auto"; then
    AC_PATH_PROG([GROFF], [groff])
@@ -661,7 +673,7 @@ AM_CONDITIONAL([HAVE_GROFF_MM], [test "$groff_mm_works" = yes])
 AM_CONDITIONAL([HAVE_GROFF_HTML], [test "$have_groff_html" = yes])
 ]) # XORG_WITH_GROFF
 
-# XORG_WITH_FOP
+# XORG_WITH_FOP([DEFAULT])
 # ----------------
 # Minimum version: 1.6.0
 #
@@ -669,7 +681,8 @@ AM_CONDITIONAL([HAVE_GROFF_HTML], [test "$have_groff_html" = yes])
 # not at the appropriate level. This macro enables a module to test for the
 # presence of the tool and obtain it's path in separate variables. Coupled with
 # the --with-fop option, it allows maximum flexibilty in making decisions
-# as whether or not to use the fop package.
+# as whether or not to use the fop package. When DEFAULT is not specified,
+# --with-fop assumes 'auto'.
 #
 # Interface to module:
 # HAVE_FOP: 	used in makefiles to conditionally generate documentation
@@ -682,10 +695,12 @@ AM_CONDITIONAL([HAVE_GROFF_HTML], [test "$have_groff_html" = yes])
 #
 AC_DEFUN([XORG_WITH_FOP],[
 AC_ARG_VAR([FOP], [Path to fop command])
+m4_define([_defopt], m4_default([$1], [auto]))
 AC_ARG_WITH(fop,
 	AS_HELP_STRING([--with-fop],
-	   [Use fop to regenerate documentation (default: yes, if installed)]),
-	   [use_fop=$withval], [use_fop=auto])
+	   [Use fop to regenerate documentation (default: ]_defopt[)]),
+	   [use_fop=$withval], [use_fop=]_defopt)
+m4_undefine([_defopt])
 
 if test "x$use_fop" = x"auto"; then
    AC_PATH_PROG([FOP], [fop])
@@ -712,7 +727,7 @@ fi
 AM_CONDITIONAL([HAVE_FOP], [test "$have_fop" = yes])
 ]) # XORG_WITH_FOP
 
-# XORG_WITH_PS2PDF
+# XORG_WITH_PS2PDF([DEFAULT])
 # ----------------
 # Minimum version: 1.6.0
 #
@@ -720,7 +735,8 @@ AM_CONDITIONAL([HAVE_FOP], [test "$have_fop" = yes])
 # not at the appropriate level. This macro enables a module to test for the
 # presence of the tool and obtain it's path in separate variables. Coupled with
 # the --with-ps2pdf option, it allows maximum flexibilty in making decisions
-# as whether or not to use the ps2pdf package.
+# as whether or not to use the ps2pdf package. When DEFAULT is not specified,
+# --with-ps2pdf assumes 'auto'.
 #
 # Interface to module:
 # HAVE_PS2PDF: 	used in makefiles to conditionally generate documentation
@@ -733,10 +749,12 @@ AM_CONDITIONAL([HAVE_FOP], [test "$have_fop" = yes])
 #
 AC_DEFUN([XORG_WITH_PS2PDF],[
 AC_ARG_VAR([PS2PDF], [Path to ps2pdf command])
+m4_define([_defopt], m4_default([$1], [auto]))
 AC_ARG_WITH(ps2pdf,
 	AS_HELP_STRING([--with-ps2pdf],
-	   [Use ps2pdf to regenerate documentation (default: yes, if installed)]),
-	   [use_ps2pdf=$withval], [use_ps2pdf=auto])
+	   [Use ps2pdf to regenerate documentation (default: ]_defopt[)]),
+	   [use_ps2pdf=$withval], [use_ps2pdf=]_defopt)
+m4_undefine([_defopt])
 
 if test "x$use_ps2pdf" = x"auto"; then
    AC_PATH_PROG([PS2PDF], [ps2pdf])
