@@ -349,6 +349,7 @@ AC_SUBST(MAKE_HTML)
 # XORG_WITH_XMLTO([MIN-VERSION], [DEFAULT])
 # ----------------
 # Minimum version: 1.5.0
+# Minimum version for optional DEFAULT argument: 1.11.0
 #
 # Documentation tools are not always available on all platforms and sometimes
 # not at the appropriate level. This macro enables a module to test for the
@@ -434,6 +435,7 @@ AM_CONDITIONAL([HAVE_XMLTO], [test "$have_xmlto" = yes])
 # XORG_WITH_ASCIIDOC([MIN-VERSION], [DEFAULT])
 # ----------------
 # Minimum version: 1.5.0
+# Minimum version for optional DEFAULT argument: 1.11.0
 #
 # Documentation tools are not always available on all platforms and sometimes
 # not at the appropriate level. This macro enables a module to test for the
@@ -502,6 +504,7 @@ AM_CONDITIONAL([HAVE_ASCIIDOC], [test "$have_asciidoc" = yes])
 # XORG_WITH_DOXYGEN([MIN-VERSION], [DEFAULT])
 # --------------------------------
 # Minimum version: 1.5.0
+# Minimum version for optional DEFAULT argument: 1.11.0
 #
 # Documentation tools are not always available on all platforms and sometimes
 # not at the appropriate level. This macro enables a module to test for the
@@ -570,6 +573,7 @@ AM_CONDITIONAL([HAVE_DOXYGEN], [test "$have_doxygen" = yes])
 # XORG_WITH_GROFF([DEFAULT])
 # ----------------
 # Minimum version: 1.6.0
+# Minimum version for optional DEFAULT argument: 1.11.0
 #
 # Documentation tools are not always available on all platforms and sometimes
 # not at the appropriate level. This macro enables a module to test for the
@@ -676,6 +680,7 @@ AM_CONDITIONAL([HAVE_GROFF_HTML], [test "$have_groff_html" = yes])
 # XORG_WITH_FOP([DEFAULT])
 # ----------------
 # Minimum version: 1.6.0
+# Minimum version for optional DEFAULT argument: 1.11.0
 #
 # Documentation tools are not always available on all platforms and sometimes
 # not at the appropriate level. This macro enables a module to test for the
@@ -730,6 +735,7 @@ AM_CONDITIONAL([HAVE_FOP], [test "$have_fop" = yes])
 # XORG_WITH_PS2PDF([DEFAULT])
 # ----------------
 # Minimum version: 1.6.0
+# Minimum version for optional DEFAULT argument: 1.11.0
 #
 # Documentation tools are not always available on all platforms and sometimes
 # not at the appropriate level. This macro enables a module to test for the
