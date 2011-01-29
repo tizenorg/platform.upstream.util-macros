@@ -432,6 +432,69 @@ AM_CONDITIONAL([HAVE_XMLTO_TEXT], [test $have_xmlto_text = yes])
 AM_CONDITIONAL([HAVE_XMLTO], [test "$have_xmlto" = yes])
 ]) # XORG_WITH_XMLTO
 
+# XORG_WITH_XSLTPROC([MIN-VERSION], [DEFAULT])
+# --------------------------------------------
+# Minimum version: 1.12.0
+# Minimum version for optional DEFAULT argument: 1.12.0
+#
+# XSLT (Extensible Stylesheet Language Transformations) is a declarative,
+# XML-based language used for the transformation of XML documents.
+# The xsltproc command line tool is for applying XSLT stylesheets to XML documents.
+# It is used under the cover by xmlto to generate html files from DocBook/XML.
+# The XSLT processor is often used as a standalone tool for transformations.
+# It should not be assumed that this tool is used only to work with documnetation.
+# When DEFAULT is not specified, --with-xsltproc assumes 'auto'.
+#
+# Interface to module:
+# HAVE_XSLTPROC: used in makefiles to conditionally generate documentation
+# XSLTPROC:	 returns the path of the xsltproc program found
+#		 returns the path set by the user in the environment
+# --with-xsltproc: 'yes' user instructs the module to use xsltproc
+#		  'no' user instructs the module not to use xsltproc
+# have_xsltproc: returns yes if xsltproc found in PATH or no
+#
+# If the user sets the value of XSLTPROC, AC_PATH_PROG skips testing the path.
+#
+AC_DEFUN([XORG_WITH_XSLTPROC],[
+AC_ARG_VAR([XSLTPROC], [Path to xsltproc command])
+m4_define([_defopt], m4_default([$2], [auto]))
+AC_ARG_WITH(xsltproc,
+	AS_HELP_STRING([--with-xsltproc],
+	   [Use xsltproc for the transformation of XML documents (default: ]_defopt[)]),
+	   [use_xsltproc=$withval], [use_xsltproc=]_defopt)
+m4_undefine([_defopt])
+
+if test "x$use_xsltproc" = x"auto"; then
+   AC_PATH_PROG([XSLTPROC], [xsltproc])
+   if test "x$XSLTPROC" = "x"; then
+        AC_MSG_WARN([xsltproc not found - cannot transform XML documents])
+	have_xsltproc=no
+   else
+        have_xsltproc=yes
+   fi
+elif test "x$use_xsltproc" = x"yes" ; then
+   AC_PATH_PROG([XSLTPROC], [xsltproc])
+   if test "x$XSLTPROC" = "x"; then
+        AC_MSG_ERROR([--with-xsltproc=yes specified but xsltproc not found in PATH])
+   fi
+   have_xsltproc=yes
+elif test "x$use_xsltproc" = x"no" ; then
+   if test "x$XSLTPROC" != "x"; then
+      AC_MSG_WARN([ignoring XSLTPROC environment variable since --with-xsltproc=no was specified])
+   fi
+   have_xsltproc=no
+else
+   AC_MSG_ERROR([--with-xsltproc expects 'yes' or 'no'])
+fi
+
+# Checking for minimum version is not implemented
+# but we want to keep the interface consistent with other commands
+m4_ifval([$1],[AC_MSG_WARN(Checking for MIN-VERSION is not implemented.)])
+
+AM_CONDITIONAL([HAVE_XSLTPROC], [test "$have_xsltproc" = yes])
+]) # XORG_WITH_XSLTPROC
+
+
 # XORG_WITH_ASCIIDOC([MIN-VERSION], [DEFAULT])
 # ----------------
 # Minimum version: 1.5.0
