@@ -951,6 +951,33 @@ AC_MSG_CHECKING([whether to build functional specifications])
 AC_MSG_RESULT([$build_specs])
 ]) # XORG_ENABLE_SPECS
 
+# XORG_ENABLE_UNIT_TESTS (enable_unit_tests=auto)
+# ----------------------------------------------
+# Minimum version: 1.13.0
+#
+# This macro enables a builder to enable/disable unit testing
+# It makes no assumption about the test cases implementation
+# Test cases may or may not use Automake "Support for test suites"
+# They may or may not use the software utility library GLib
+#
+# Interface to module:
+# ENABLE_UNIT_TESTS:	used in makefiles to conditionally build tests
+# enable_unit_tests:    used in configure.ac for additional configuration
+# --enable-unit-tests:	'yes' user instructs the module to build tests
+#			'no' user instructs the module not to build tests
+# parm1:		specify the default value, yes or no.
+#
+AC_DEFUN([XORG_ENABLE_UNIT_TESTS],[
+m4_define([_defopt], m4_default([$1], [auto]))
+AC_ARG_ENABLE(unit-tests, AS_HELP_STRING([--enable-unit-tests],
+	[Enable building unit test cases (default: ]_defopt[)]),
+	[enable_unit_tests=$enableval], [enable_unit_tests=]_defopt)
+m4_undefine([_defopt])
+AM_CONDITIONAL(ENABLE_UNIT_TESTS, [test "x$enable_unit_tests" != xno])
+AC_MSG_CHECKING([whether to build unit test cases])
+AC_MSG_RESULT([$enable_unit_tests])
+]) # XORG_ENABLE_UNIT_TESTS
+
 # XORG_CHECK_MALLOC_ZERO
 # ----------------------
 # Minimum version: 1.0.0
