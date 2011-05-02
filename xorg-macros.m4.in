@@ -1356,6 +1356,15 @@ AC_ARG_ENABLE(strict-compilation,
 			  [STRICT_COMPILE=$enableval], [STRICT_COMPILE=no])
 if test "x$GCC" = xyes ; then
     STRICT_CFLAGS="-pedantic -Werror"
+    # Add -Werror=attributes if supported (gcc 4.2 & later)
+    AC_MSG_CHECKING([if $CC supports -Werror=attributes])
+    save_CFLAGS="$CFLAGS"
+    CFLAGS="$CFLAGS $STRICT_CFLAGS -Werror=attributes"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([return 0;])],
+		      [STRICT_CFLAGS="$STRICT_CFLAGS -Werror=attributes"
+		       AC_MSG_RESULT([yes])],
+		      [AC_MSG_RESULT([no])])
+    CFLAGS="$save_CFLAGS"
 elif test "x$SUNCC" = "xyes"; then
     STRICT_CFLAGS="-errwarn"
 elif test "x$INTELCC" = "xyes"; then
