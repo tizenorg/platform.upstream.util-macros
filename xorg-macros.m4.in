@@ -457,6 +457,8 @@ AM_CONDITIONAL([HAVE_XMLTO], [test "$have_xmlto" = yes])
 #
 AC_DEFUN([XORG_WITH_XSLTPROC],[
 AC_ARG_VAR([XSLTPROC], [Path to xsltproc command])
+# Preserves the interface, should it be implemented later
+m4_ifval([$1], [m4_warn([syntax], [Checking for xsltproc MIN-VERSION is not implemented])])
 m4_define([_defopt], m4_default([$2], [auto]))
 AC_ARG_WITH(xsltproc,
 	AS_HELP_STRING([--with-xsltproc],
@@ -486,10 +488,6 @@ elif test "x$use_xsltproc" = x"no" ; then
 else
    AC_MSG_ERROR([--with-xsltproc expects 'yes' or 'no'])
 fi
-
-# Checking for minimum version is not implemented
-# but we want to keep the interface consistent with other commands
-m4_ifval([$1],[AC_MSG_WARN(Checking for MIN-VERSION is not implemented.)])
 
 AM_CONDITIONAL([HAVE_XSLTPROC], [test "$have_xsltproc" = yes])
 ]) # XORG_WITH_XSLTPROC
