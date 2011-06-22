@@ -740,10 +740,11 @@ AM_CONDITIONAL([HAVE_GROFF_MM], [test "$groff_mm_works" = yes])
 AM_CONDITIONAL([HAVE_GROFF_HTML], [test "$have_groff_html" = yes])
 ]) # XORG_WITH_GROFF
 
-# XORG_WITH_FOP([DEFAULT])
-# ----------------
+# XORG_WITH_FOP([MIN-VERSION], [DEFAULT])
+# ---------------------------------------
 # Minimum version: 1.6.0
 # Minimum version for optional DEFAULT argument: 1.11.0
+# Minimum version for optional MIN-VERSION argument: 1.15.0
 #
 # Documentation tools are not always available on all platforms and sometimes
 # not at the appropriate level. This macro enables a module to test for the
@@ -763,7 +764,7 @@ AM_CONDITIONAL([HAVE_GROFF_HTML], [test "$have_groff_html" = yes])
 #
 AC_DEFUN([XORG_WITH_FOP],[
 AC_ARG_VAR([FOP], [Path to fop command])
-m4_define([_defopt], m4_default([$1], [auto]))
+m4_define([_defopt], m4_default([$2], [auto]))
 AC_ARG_WITH(fop,
 	AS_HELP_STRING([--with-fop],
 	   [Use fop to regenerate documentation (default: ]_defopt[)]),
@@ -792,6 +793,22 @@ elif test "x$use_fop" = x"no" ; then
 else
    AC_MSG_ERROR([--with-fop expects 'yes' or 'no'])
 fi
+
+# Test for a minimum version of fop, if provided.
+m4_ifval([$1],
+[if test "$have_fop" = yes; then
+    # scrape the fop version
+    AC_MSG_CHECKING([for fop minimum version])
+    fop_version=`$FOP -version 2>/dev/null | cut -d' ' -f3`
+    AC_MSG_RESULT([$fop_version])
+    AS_VERSION_COMPARE([$fop_version], [$1],
+        [if test "x$use_fop" = xauto; then
+            AC_MSG_WARN([fop version $fop_version found, but $1 needed])
+            have_fop=no
+        else
+            AC_MSG_ERROR([fop version $fop_version found, but $1 needed])
+        fi])
+fi])
 AM_CONDITIONAL([HAVE_FOP], [test "$have_fop" = yes])
 ]) # XORG_WITH_FOP
 
