@@ -494,6 +494,62 @@ m4_ifval([$1],[AC_MSG_WARN(Checking for MIN-VERSION is not implemented.)])
 AM_CONDITIONAL([HAVE_XSLTPROC], [test "$have_xsltproc" = yes])
 ]) # XORG_WITH_XSLTPROC
 
+# XORG_WITH_PERL([MIN-VERSION], [DEFAULT])
+# ----------------------------------------
+# Minimum version: 1.15.0
+#
+# PERL (Practical Extraction and Report Language) is a language optimized for
+# scanning arbitrary text files, extracting information from those text files,
+# and printing reports based on that information.
+#
+# When DEFAULT is not specified, --with-perl assumes 'auto'.
+#
+# Interface to module:
+# HAVE_PERL: used in makefiles to conditionally scan text files
+# PERL:	     returns the path of the perl program found
+#	     returns the path set by the user in the environment
+# --with-perl: 'yes' user instructs the module to use perl
+#	       'no' user instructs the module not to use perl
+# have_perl: returns yes if perl found in PATH or no
+#
+# If the user sets the value of PERL, AC_PATH_PROG skips testing the path.
+#
+AC_DEFUN([XORG_WITH_PERL],[
+AC_ARG_VAR([PERL], [Path to perl command])
+# Preserves the interface, should it be implemented later
+m4_ifval([$1], [m4_warn([syntax], [Checking for perl MIN-VERSION is not implemented])])
+m4_define([_defopt], m4_default([$2], [auto]))
+AC_ARG_WITH(perl,
+	AS_HELP_STRING([--with-perl],
+	   [Use perl for extracting information from files (default: ]_defopt[)]),
+	   [use_perl=$withval], [use_perl=]_defopt)
+m4_undefine([_defopt])
+
+if test "x$use_perl" = x"auto"; then
+   AC_PATH_PROG([PERL], [perl])
+   if test "x$PERL" = "x"; then
+        AC_MSG_WARN([perl not found - cannot extract information and report])
+	have_perl=no
+   else
+        have_perl=yes
+   fi
+elif test "x$use_perl" = x"yes" ; then
+   AC_PATH_PROG([PERL], [perl])
+   if test "x$PERL" = "x"; then
+        AC_MSG_ERROR([--with-perl=yes specified but perl not found in PATH])
+   fi
+   have_perl=yes
+elif test "x$use_perl" = x"no" ; then
+   if test "x$PERL" != "x"; then
+      AC_MSG_WARN([ignoring PERL environment variable since --with-perl=no was specified])
+   fi
+   have_perl=no
+else
+   AC_MSG_ERROR([--with-perl expects 'yes' or 'no'])
+fi
+
+AM_CONDITIONAL([HAVE_PERL], [test "$have_perl" = yes])
+]) # XORG_WITH_PERL
 
 # XORG_WITH_ASCIIDOC([MIN-VERSION], [DEFAULT])
 # ----------------
