@@ -1479,21 +1479,11 @@ AC_SUBST([BASE_CFLAGS])
 # it is updated to use BASE_CFLAGS.
 #
 AC_DEFUN([XORG_CWARNFLAGS], [
-AC_REQUIRE([AC_PROG_CC_C99])
+AC_REQUIRE([XORG_COMPILER_FLAGS])
 AC_REQUIRE([XORG_COMPILER_BRAND])
+CWARNFLAGS="$BASE_CFLAGS"
 if  test "x$GCC" = xyes ; then
-    CWARNFLAGS="-Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes \
--Wmissing-declarations -Wnested-externs -fno-strict-aliasing \
--Wbad-function-cast -Wformat=2"
-    case `$CC -dumpversion` in
-    3.4.* | 4.*)
-	CWARNFLAGS="$CWARNFLAGS -Wold-style-definition -Wdeclaration-after-statement"
-	;;
-    esac
-else
-    if test "x$SUNCC" = "xyes"; then
-	CWARNFLAGS="-v"
-    fi
+    CWARNFLAGS="$CWARNFLAGS -fno-strict-aliasing"
 fi
 AC_SUBST(CWARNFLAGS)
 ]) # XORG_CWARNFLAGS
