@@ -1452,6 +1452,7 @@ else
     BASE_CFLAGS=""
 fi
 
+# This chunk of warnings were those that existed in the legacy CWARNFLAGS
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wall])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wpointer-arith])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wstrict-prototypes])
@@ -1462,6 +1463,39 @@ XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wbad-function-cast])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wformat=2], [-Wformat])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wold-style-definition])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wdeclaration-after-statement])
+
+# This chunk adds additional warnings that could catch undesired effects.
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wunused])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wuninitialized])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wshadow])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wcast-qual])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wmissing-noreturn])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wmissing-format-attribute])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wredundant-decls])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Winline])
+
+# These are currently disabled because they are noisy.  They will be enabled
+# in the future once the codebase is sufficiently modernized to silence
+# them.  For now, I don't want them to drown out the other warnings.
+# XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wlogical-op])
+# XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wparentheses])
+# XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wcast-align])
+
+# Turn some warnings into errors, so we don't accidently get successful builds
+# when there are problems that should be fixed.
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=implicit], [-errwarn=E_NO_EXPLICIT_TYPE_GIVEN -errwarn=E_NO_IMPLICIT_DECL_ALLOWED])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=nonnull])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=init-self])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=main])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=missing-braces])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=sequence-point])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=return-type], [-errwarn=E_FUNC_HAS_NO_RETURN_STMT])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=trigraphs])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=array-bounds])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=write-strings])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=address])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=int-to-pointer-cast], [-errwarn=E_BAD_PTR_INT_COMBINATION])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=pointer-to-int-cast]) # Also -errwarn=E_BAD_PTR_INT_COMBINATION
 
 AC_SUBST([BASE_CFLAGS])
 ]) # XORG_COMPILER_FLAGS
