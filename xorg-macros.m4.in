@@ -1116,8 +1116,8 @@ fi
 AM_CONDITIONAL([HAVE_GLIB], [test "$have_glib" = yes])
 ]) # XORG_WITH_GLIB
 
-# XORG_LD_WRAP
-# ------------
+# XORG_LD_WRAP([required|optional])
+# ---------------------------------
 # Minimum version: 1.13.0
 #
 # Check if linker supports -wrap, passed via compiler flags
@@ -1125,10 +1125,15 @@ AM_CONDITIONAL([HAVE_GLIB], [test "$have_glib" = yes])
 # When used with ENABLE_UNIT_TESTS, it is assumed -wrap is used for unit testing.
 # Otherwise the value of $enable_unit_tests is blank.
 #
+# Argument added in 1.16.0 - default is "required", to match existing behavior
+# of returning an error if enable_unit_tests is yes, and ld -wrap is not
+# available, an argument of "optional" allows use when some unit tests require
+# ld -wrap and others do not.
+#
 AC_DEFUN([XORG_LD_WRAP],[
 XORG_CHECK_LINKER_FLAGS([-Wl,-wrap,exit],[have_ld_wrap=yes],[have_ld_wrap=no])
 # Not having ld wrap when unit testing has been explicitly requested is an error
-if test "x$enable_unit_tests" = x"yes"; then
+if test "x$enable_unit_tests" = x"yes" -a "x$1" != "xoptional"; then
   if test "x$have_ld_wrap" = x"no"; then
     AC_MSG_ERROR([--enable-unit-tests=yes specified but ld -wrap support is not available])
   fi
