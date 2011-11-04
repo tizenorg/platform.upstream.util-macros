@@ -1131,7 +1131,10 @@ AM_CONDITIONAL([HAVE_GLIB], [test "$have_glib" = yes])
 # ld -wrap and others do not.
 #
 AC_DEFUN([XORG_LD_WRAP],[
-XORG_CHECK_LINKER_FLAGS([-Wl,-wrap,exit],[have_ld_wrap=yes],[have_ld_wrap=no])
+XORG_CHECK_LINKER_FLAGS([-Wl,-wrap,exit],[have_ld_wrap=yes],[have_ld_wrap=no],
+    [AC_LANG_PROGRAM([#include <stdlib.h>
+                      void __wrap_exit(int status) { return; }],
+                     [exit(0);])])
 # Not having ld wrap when unit testing has been explicitly requested is an error
 if test "x$enable_unit_tests" = x"yes" -a "x$1" != "xoptional"; then
   if test "x$have_ld_wrap" = x"no"; then
@@ -1146,7 +1149,7 @@ AM_CONDITIONAL([HAVE_LD_WRAP], [test "$have_ld_wrap" = yes])
 # -----------------------
 # SYNOPSIS
 #
-#   XORG_CHECK_LINKER_FLAGS(FLAGS, [ACTION-SUCCESS], [ACTION-FAILURE])
+#   XORG_CHECK_LINKER_FLAGS(FLAGS, [ACTION-SUCCESS], [ACTION-FAILURE], [PROGRAM-SOURCE])
 #
 # DESCRIPTION
 #
@@ -1155,6 +1158,8 @@ AM_CONDITIONAL([HAVE_LD_WRAP], [test "$have_ld_wrap" = yes])
 #
 #   ACTION-SUCCESS/ACTION-FAILURE are shell commands to execute on
 #   success/failure.
+#
+#   PROGRAM-SOURCE is the program source to link with, if needed
 #
 #   NOTE: Based on AX_CHECK_COMPILER_FLAGS.
 #
@@ -1196,7 +1201,7 @@ AS_LITERAL_IF([$1],
   [AC_CACHE_VAL(AS_TR_SH(xorg_cv_linker_flags_[$1]), [
       ax_save_FLAGS=$LDFLAGS
       LDFLAGS="$1"
-      AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+      AC_LINK_IFELSE([m4_default([$4],[AC_LANG_PROGRAM()])],
         AS_TR_SH(xorg_cv_linker_flags_[$1])=yes,
         AS_TR_SH(xorg_cv_linker_flags_[$1])=no)
       LDFLAGS=$ax_save_FLAGS])],
