@@ -1045,6 +1045,7 @@ AC_MSG_RESULT([$build_specs])
 AC_DEFUN([XORG_ENABLE_UNIT_TESTS],[
 AC_BEFORE([$0], [XORG_WITH_GLIB])
 AC_BEFORE([$0], [XORG_LD_WRAP])
+AC_REQUIRE([XORG_MEMORY_CHECK_FLAGS])
 m4_define([_defopt], m4_default([$1], [auto]))
 AC_ARG_ENABLE(unit-tests, AS_HELP_STRING([--enable-unit-tests],
 	[Enable building unit test cases (default: ]_defopt[)]),
@@ -1219,6 +1220,52 @@ else
 	m4_default([$3], :)
 fi
 ]) # XORG_CHECK_LINKER_FLAGS
+
+# XORG_MEMORY_CHECK_FLAGS
+# -----------------------
+# Minimum version: 1.16.0
+#
+# This macro attempts to find appropriate memory checking functionality
+# for various platforms which unit testing code may use to catch various
+# forms of memory allocation and access errors in testing.
+#
+# Interface to module:
+# XORG_MALLOC_DEBUG_ENV - environment variables to set to enable debugging
+#                         Usually added to TESTS_ENVIRONMENT in Makefile.am
+#
+# If the user sets the value of XORG_MALLOC_DEBUG_ENV, it is used verbatim.
+#
+AC_DEFUN([XORG_MEMORY_CHECK_FLAGS],[
+
+AC_REQUIRE([AC_CANONICAL_HOST])
+AC_ARG_VAR([XORG_MALLOC_DEBUG_ENV],
+           [Environment variables to enable memory checking in tests])
+
+# Check for different types of support on different platforms
+case $host_os in
+    solaris*)
+        AC_CHECK_LIB([umem], [umem_alloc],
+            [malloc_debug_env='LD_PRELOAD=libumem.so UMEM_DEBUG=default'])
+        ;;
+    *-gnu*) # GNU libc - Value is used as a single byte bit pattern,
+        # both directly and inverted, so should not be 0 or 255.
+        malloc_debug_env='MALLOC_PERTURB_=15'
+        ;;
+    darwin*)
+        malloc_debug_env='MallocPreScribble=1 MallocScribble=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib'
+        ;;
+    *bsd*)
+        malloc_debug_env='MallocPreScribble=1 MallocScribble=1'
+        ;;
+esac
+
+# User supplied flags override default flags
+if test "x$XORG_MALLOC_DEBUG_ENV" != "x"; then
+    malloc_debug_env="$XORG_MALLOC_DEBUG_ENV"
+fi
+
+AC_SUBST([XORG_MALLOC_DEBUG_ENV],[$malloc_debug_env])
+]) # XORG_WITH_LINT
 
 # XORG_CHECK_MALLOC_ZERO
 # ----------------------
