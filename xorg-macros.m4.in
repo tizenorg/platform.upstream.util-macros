@@ -1445,7 +1445,8 @@ AC_CHECK_DECL([__SUNPRO_C], [SUNCC="yes"], [SUNCC="no"])
 #
 # Note that this does not guarantee that the compiler supports the flag as some
 # compilers will simply ignore arguments that they do not understand, but we do
-# attempt to weed out false positives by using -Werror=unknown-warning-option
+# attempt to weed out false positives by using -Werror=unknown-warning-option and
+# -Werror=unused-command-line-argument
 #
 AC_DEFUN([XORG_TESTSET_CFLAG], [
 AC_REQUIRE([AC_PROG_CC_C99])
@@ -1464,14 +1465,31 @@ if test "x$xorg_testset_unknown_warning_option" = "x" ; then
 	CFLAGS="$xorg_testset_save_CFLAGS"
 fi
 
+if test "x$xorg_testset_unused_command_line_argument" = "x" ; then
+	if test "x$xorg_testset_unknown_warning_option" = "xyes" ; then
+		CFLAGS="$CFLAGS -Werror=unknown-warning-option"
+	fi
+	CFLAGS="$CFLAGS -Werror=unused-command-line-argument"
+	AC_MSG_CHECKING([if $CC supports -Werror=unused-command-line-argument])
+	AC_COMPILE_IFELSE([AC_LANG_SOURCE([int i;])],
+	                  [xorg_testset_unused_command_line_argument=yes],
+	                  [xorg_testset_unused_command_line_argument=no])
+	AC_MSG_RESULT([$xorg_testset_unused_command_line_argument])
+	CFLAGS="$xorg_testset_save_CFLAGS"
+fi
+
 found="no"
 m4_foreach([flag], m4_cdr($@), [
 	if test $found = "no" ; then
 		if test "x$xorg_testset_unknown_warning_option" = "xyes" ; then
-			CFLAGS="$CFLAGS -Werror=unknown-warning-option ]flag["
-		else
-			CFLAGS="$CFLAGS ]flag["
+			CFLAGS="$CFLAGS -Werror=unknown-warning-option"
 		fi
+
+		if test "x$xorg_testset_unused_command_line_argument" = "xyes" ; then
+			CFLAGS="$CFLAGS -Werror=unused-command-line-argument"
+		fi
+
+		CFLAGS="$CFLAGS ]flag["
 
 		AC_MSG_CHECKING([if $CC supports ]flag[])
 		AC_COMPILE_IFELSE([AC_LANG_SOURCE([int i;])],
