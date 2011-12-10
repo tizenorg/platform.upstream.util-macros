@@ -1547,7 +1547,6 @@ XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wcast-qual])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wmissing-noreturn])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wmissing-format-attribute])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wredundant-decls])
-XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Winline])
 
 # These are currently disabled because they are noisy.  They will be enabled
 # in the future once the codebase is sufficiently modernized to silence
