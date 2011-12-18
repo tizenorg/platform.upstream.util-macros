@@ -1520,6 +1520,12 @@ m4_foreach([flag], m4_cdr($@), [
 AC_DEFUN([XORG_COMPILER_FLAGS], [
 AC_REQUIRE([XORG_COMPILER_BRAND])
 
+AC_ARG_ENABLE(selective-werror,
+              AS_HELP_STRING([--disable-selective-werror],
+                             [Turn off selective compiler errors. (default: enabled)]),
+              [SELECTIVE_WERROR=$enableval],
+              [SELECTIVE_WERROR=yes])
+
 # -v is too short to test reliably with XORG_TESTSET_CFLAG
 if test "x$SUNCC" = "xyes"; then
     BASE_CFLAGS="-v"
@@ -1557,6 +1563,8 @@ XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wredundant-decls])
 
 # Turn some warnings into errors, so we don't accidently get successful builds
 # when there are problems that should be fixed.
+
+if test "x$SELECTIVE_WERROR" = "xyes" ; then
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=implicit], [-errwarn=E_NO_EXPLICIT_TYPE_GIVEN -errwarn=E_NO_IMPLICIT_DECL_ALLOWED])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=nonnull])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=init-self])
@@ -1570,6 +1578,22 @@ XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=write-strings])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=address])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=int-to-pointer-cast], [-errwarn=E_BAD_PTR_INT_COMBINATION])
 XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Werror=pointer-to-int-cast]) # Also -errwarn=E_BAD_PTR_INT_COMBINATION
+else
+AC_MSG_WARN([You have chosen not to turn some select compiler warnings into errors.  This should not be necessary.  Please report why you needed to do so in a bug report at $PACKAGE_BUGREPORT])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wimplicit])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wnonnull])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Winit-self])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wmain])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wmissing-braces])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wsequence-point])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wreturn-type])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wtrigraphs])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Warray-bounds])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wwrite-strings])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Waddress])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wint-to-pointer-cast])
+XORG_TESTSET_CFLAG([BASE_CFLAGS], [-Wpointer-to-int-cast])
+fi
 
 AC_SUBST([BASE_CFLAGS])
 ]) # XORG_COMPILER_FLAGS
