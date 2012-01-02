@@ -1457,11 +1457,12 @@ xorg_testset_save_CFLAGS="$CFLAGS"
 
 if test "x$xorg_testset_unknown_warning_option" = "x" ; then
 	CFLAGS="$CFLAGS -Werror=unknown-warning-option"
-	AC_MSG_CHECKING([if $CC supports -Werror=unknown-warning-option])
-	AC_COMPILE_IFELSE([AC_LANG_SOURCE([int i;])],
-	                  [xorg_testset_unknown_warning_option=yes],
-	                  [xorg_testset_unknown_warning_option=no])
-	AC_MSG_RESULT([$xorg_testset_unknown_warning_option])
+	AC_CACHE_CHECK([if $CC supports -Werror=unknown-warning-option],
+			xorg_cv_cc_flag_unknown_warning_option,
+			AC_COMPILE_IFELSE([AC_LANG_SOURCE([int i;])],
+					  [xorg_cv_cc_flag_unknown_warning_option=yes],
+					  [xorg_cv_cc_flag_unknown_warning_option=no]))
+	xorg_testset_unknown_warning_option=$xorg_cv_cc_flag_unknown_warning_option
 	CFLAGS="$xorg_testset_save_CFLAGS"
 fi
 
@@ -1470,11 +1471,12 @@ if test "x$xorg_testset_unused_command_line_argument" = "x" ; then
 		CFLAGS="$CFLAGS -Werror=unknown-warning-option"
 	fi
 	CFLAGS="$CFLAGS -Werror=unused-command-line-argument"
-	AC_MSG_CHECKING([if $CC supports -Werror=unused-command-line-argument])
-	AC_COMPILE_IFELSE([AC_LANG_SOURCE([int i;])],
-	                  [xorg_testset_unused_command_line_argument=yes],
-	                  [xorg_testset_unused_command_line_argument=no])
-	AC_MSG_RESULT([$xorg_testset_unused_command_line_argument])
+	AC_CACHE_CHECK([if $CC supports -Werror=unused-command-line-argument],
+			xorg_cv_cc_flag_unused_command_line_argument,
+			AC_COMPILE_IFELSE([AC_LANG_SOURCE([int i;])],
+					  [xorg_cv_cc_flag_unused_command_line_argument=yes],
+					  [xorg_cv_cc_flag_unused_command_line_argument=no]))
+	xorg_testset_unused_command_line_argument=$xorg_cv_cc_flag_unused_command_line_argument
 	CFLAGS="$xorg_testset_save_CFLAGS"
 fi
 
@@ -1491,12 +1493,18 @@ m4_foreach([flag], m4_cdr($@), [
 
 		CFLAGS="$CFLAGS ]flag["
 
+dnl Some hackery here since AC_CACHE_VAL can't handle a non-literal varname
 		AC_MSG_CHECKING([if $CC supports ]flag[])
-		AC_LINK_IFELSE([AC_LANG_PROGRAM([int i;])],
-		                  [supported=yes], [supported=no])
-		AC_MSG_RESULT([$supported])
+		cacheid=`AS_ECHO_N([xorg_cv_cc_flag_]flag[])`
+		AC_CACHE_VAL(AS_TR_SH($cacheid),
+			     [AC_LINK_IFELSE([AC_LANG_PROGRAM([int i;])],
+					     [eval AS_TR_SH($cacheid)=yes],
+					     [eval AS_TR_SH($cacheid)=no])])
+
 		CFLAGS="$xorg_testset_save_CFLAGS"
 
+		eval supported=$AS_TR_SH($cacheid)
+		AC_MSG_RESULT([$supported])
 		if test "$supported" = "yes" ; then
 			$1="$$1 ]flag["
 			found="yes"
