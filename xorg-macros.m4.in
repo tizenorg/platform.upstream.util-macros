@@ -1495,7 +1495,7 @@ m4_foreach([flag], m4_cdr($@), [
 
 dnl Some hackery here since AC_CACHE_VAL can't handle a non-literal varname
 		AC_MSG_CHECKING([if $CC supports ]flag[])
-		cacheid=`AS_ECHO_N([xorg_cv_cc_flag_]flag[])`
+		cacheid=`AS_ECHO([xorg_cv_cc_flag_]flag[])`
 		AC_CACHE_VAL(AS_TR_SH($cacheid),
 			     [AC_LINK_IFELSE([AC_LANG_PROGRAM([int i;])],
 					     [eval AS_TR_SH($cacheid)=yes],
