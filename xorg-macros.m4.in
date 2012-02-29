@@ -1449,49 +1449,60 @@ AC_CHECK_DECL([__SUNPRO_C], [SUNCC="yes"], [SUNCC="no"])
 # -Werror=unused-command-line-argument
 #
 AC_DEFUN([XORG_TESTSET_CFLAG], [
-AC_REQUIRE([AC_PROG_CC_C99])
 m4_if([$#], 0, [m4_fatal([XORG_TESTSET_CFLAG was given with an unsupported number of arguments])])
 m4_if([$#], 1, [m4_fatal([XORG_TESTSET_CFLAG was given with an unsupported number of arguments])])
 
-xorg_testset_save_CFLAGS="$CFLAGS"
+AC_LANG_COMPILER_REQUIRE
+
+AC_LANG_CASE(
+	[C], [
+		AC_REQUIRE([AC_PROG_CC_C99])
+		define([PREFIX], [C])
+	],
+	[C++], [
+		define([PREFIX], [CXX])
+	]
+)
+
+[xorg_testset_save_]PREFIX[FLAGS]="$PREFIX[FLAGS]"
 
 if test "x$xorg_testset_unknown_warning_option" = "x" ; then
-	CFLAGS="$CFLAGS -Werror=unknown-warning-option"
-	AC_CACHE_CHECK([if $CC supports -Werror=unknown-warning-option],
-			xorg_cv_cc_flag_unknown_warning_option,
+	PREFIX[FLAGS]="$PREFIX[FLAGS] -Werror=unknown-warning-option"
+	AC_CACHE_CHECK([if compiler supports -Werror=unknown-warning-option],
+			xorg_cv_compiler_flag_unknown_warning_option,
 			AC_COMPILE_IFELSE([AC_LANG_SOURCE([int i;])],
-					  [xorg_cv_cc_flag_unknown_warning_option=yes],
-					  [xorg_cv_cc_flag_unknown_warning_option=no]))
-	xorg_testset_unknown_warning_option=$xorg_cv_cc_flag_unknown_warning_option
-	CFLAGS="$xorg_testset_save_CFLAGS"
+					  [xorg_cv_compiler_flag_unknown_warning_option=yes],
+					  [xorg_cv_compiler_flag_unknown_warning_option=no]))
+	xorg_testset_unknown_warning_option=$xorg_cv_compiler_flag_unknown_warning_option
+	PREFIX[FLAGS]="$[xorg_testset_save_]PREFIX[FLAGS]"
 fi
 
 if test "x$xorg_testset_unused_command_line_argument" = "x" ; then
 	if test "x$xorg_testset_unknown_warning_option" = "xyes" ; then
-		CFLAGS="$CFLAGS -Werror=unknown-warning-option"
+		PREFIX[FLAGS]="$PREFIX[FLAGS] -Werror=unknown-warning-option"
 	fi
-	CFLAGS="$CFLAGS -Werror=unused-command-line-argument"
-	AC_CACHE_CHECK([if $CC supports -Werror=unused-command-line-argument],
-			xorg_cv_cc_flag_unused_command_line_argument,
+	PREFIX[FLAGS]="$PREFIX[FLAGS] -Werror=unused-command-line-argument"
+	AC_CACHE_CHECK([if compiler supports -Werror=unused-command-line-argument],
+			xorg_cv_compiler_flag_unused_command_line_argument,
 			AC_COMPILE_IFELSE([AC_LANG_SOURCE([int i;])],
-					  [xorg_cv_cc_flag_unused_command_line_argument=yes],
-					  [xorg_cv_cc_flag_unused_command_line_argument=no]))
-	xorg_testset_unused_command_line_argument=$xorg_cv_cc_flag_unused_command_line_argument
-	CFLAGS="$xorg_testset_save_CFLAGS"
+					  [xorg_cv_compiler_flag_unused_command_line_argument=yes],
+					  [xorg_cv_compiler_flag_unused_command_line_argument=no]))
+	xorg_testset_unused_command_line_argument=$xorg_cv_compiler_flag_unused_command_line_argument
+	PREFIX[FLAGS]="$[xorg_testset_save_]PREFIX[FLAGS]"
 fi
 
 found="no"
 m4_foreach([flag], m4_cdr($@), [
 	if test $found = "no" ; then
 		if test "x$xorg_testset_unknown_warning_option" = "xyes" ; then
-			CFLAGS="$CFLAGS -Werror=unknown-warning-option"
+			PREFIX[FLAGS]="$PREFIX[FLAGS] -Werror=unknown-warning-option"
 		fi
 
 		if test "x$xorg_testset_unused_command_line_argument" = "xyes" ; then
-			CFLAGS="$CFLAGS -Werror=unused-command-line-argument"
+			PREFIX[FLAGS]="$PREFIX[FLAGS] -Werror=unused-command-line-argument"
 		fi
 
-		CFLAGS="$CFLAGS ]flag["
+		PREFIX[FLAGS]="$PREFIX[FLAGS] ]flag["
 
 dnl Some hackery here since AC_CACHE_VAL can't handle a non-literal varname
 		AC_MSG_CHECKING([if $CC supports ]flag[])
@@ -1501,7 +1512,7 @@ dnl Some hackery here since AC_CACHE_VAL can't handle a non-literal varname
 					     [eval AS_TR_SH($cacheid)=yes],
 					     [eval AS_TR_SH($cacheid)=no])])
 
-		CFLAGS="$xorg_testset_save_CFLAGS"
+		PREFIX[FLAGS]="$[xorg_testset_save_]PREFIX[FLAGS]"
 
 		eval supported=$AS_TR_SH($cacheid)
 		AC_MSG_RESULT([$supported])
