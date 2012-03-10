@@ -1551,15 +1551,15 @@ m4_foreach([flag], m4_cdr($@), [
 
 dnl Some hackery here since AC_CACHE_VAL can't handle a non-literal varname
 		AC_MSG_CHECKING([if $CC supports ]flag[])
-		cacheid=`AS_ECHO([xorg_cv_cc_flag_]flag[])`
-		AC_CACHE_VAL(AS_TR_SH($cacheid),
+		cacheid=AS_TR_SH([xorg_cv_cc_flag_]flag[])
+		AC_CACHE_VAL($cacheid,
 			     [AC_LINK_IFELSE([AC_LANG_PROGRAM([int i;])],
-					     [eval AS_TR_SH($cacheid)=yes],
-					     [eval AS_TR_SH($cacheid)=no])])
+					     [eval $cacheid=yes],
+					     [eval $cacheid=no])])
 
 		PREFIX[FLAGS]="$[xorg_testset_save_]PREFIX[FLAGS]"
 
-		eval supported=$AS_TR_SH($cacheid)
+		eval supported=\$$cacheid
 		AC_MSG_RESULT([$supported])
 		if test "$supported" = "yes" ; then
 			$1="$$1 ]flag["
