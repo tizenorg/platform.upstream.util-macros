@@ -25,6 +25,7 @@ make
 rm -rf %{buildroot}/usr/share/util-macros/INSTALL
 
 %files
+%license COPYING
 %{_datadir}/aclocal/*
 %{_datadir}/pkgconfig/*
 
