@@ -6,6 +6,7 @@ License: MIT/X11
 Group:   Development/System
 URL:     http://www.x.org
 Source: util-macros-%{version}.tar.bz2
+Source1001: 	util-macros.manifest
 
 %description
  This package provides build utilties tha ship with the X Window System, including:
@@ -13,6 +14,7 @@ Source: util-macros-%{version}.tar.bz2
 
 %prep
 %setup -q -n util-macros-%{version}
+cp %{SOURCE1001} .
 
 %build
 %configure
@@ -25,6 +27,7 @@ make
 rm -rf %{buildroot}/usr/share/util-macros/INSTALL
 
 %files
+%manifest %{name}.manifest
 %license COPYING
 %{_datadir}/aclocal/*
 %{_datadir}/pkgconfig/*
