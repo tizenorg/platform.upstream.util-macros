@@ -1543,11 +1543,11 @@ fi
 found="no"
 m4_foreach([flag], m4_cdr($@), [
 	if test $found = "no" ; then
-		if test "x$xorg_testset_unknown_warning_option" = "xyes" ; then
+		if test "x$xorg_testset_]CACHE_PREFIX[_unknown_warning_option" = "xyes" ; then
 			PREFIX[FLAGS]="$PREFIX[FLAGS] -Werror=unknown-warning-option"
 		fi
 
-		if test "x$xorg_testset_unused_command_line_argument" = "xyes" ; then
+		if test "x$xorg_testset_]CACHE_PREFIX[_unused_command_line_argument" = "xyes" ; then
 			PREFIX[FLAGS]="$PREFIX[FLAGS] -Werror=unused-command-line-argument"
 		fi
 
