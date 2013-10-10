@@ -1320,7 +1320,8 @@ AC_ARG_ENABLE(malloc0returnsnull,
 
 AC_MSG_CHECKING([whether malloc(0) returns NULL])
 if test "x$MALLOC_ZERO_RETURNS_NULL" = xauto; then
-	AC_RUN_IFELSE([AC_LANG_PROGRAM([
+AC_CACHE_VAL([xorg_cv_malloc0_returns_null],
+	[AC_RUN_IFELSE([AC_LANG_PROGRAM([
 #include <stdlib.h>
 ],[
     char *m0, *r0, *c0, *p;
@@ -1330,9 +1331,9 @@ if test "x$MALLOC_ZERO_RETURNS_NULL" = xauto; then
     c0 = calloc(0,10);
     exit((m0 == 0 || r0 == 0 || c0 == 0) ? 0 : 1);
 ])],
-		[MALLOC_ZERO_RETURNS_NULL=yes],
-		[MALLOC_ZERO_RETURNS_NULL=no],
-		[MALLOC_ZERO_RETURNS_NULL=yes])
+		[xorg_cv_malloc0_returns_null=yes],
+		[xorg_cv_malloc0_returns_null=no])])
+MALLOC_ZERO_RETURNS_NULL=$xorg_cv_malloc0_returns_null
 fi
 AC_MSG_RESULT([$MALLOC_ZERO_RETURNS_NULL])
 
