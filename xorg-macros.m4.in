@@ -619,9 +619,10 @@ AM_CONDITIONAL([HAVE_ASCIIDOC], [test "$have_asciidoc" = yes])
 ]) # XORG_WITH_ASCIIDOC
 
 # XORG_WITH_DOXYGEN([MIN-VERSION], [DEFAULT])
-# --------------------------------
+# -------------------------------------------
 # Minimum version: 1.5.0
 # Minimum version for optional DEFAULT argument: 1.11.0
+# Minimum version for optional DOT checking: 1.18.0
 #
 # Documentation tools are not always available on all platforms and sometimes
 # not at the appropriate level. This macro enables a module to test for the
@@ -641,6 +642,7 @@ AM_CONDITIONAL([HAVE_ASCIIDOC], [test "$have_asciidoc" = yes])
 #
 AC_DEFUN([XORG_WITH_DOXYGEN],[
 AC_ARG_VAR([DOXYGEN], [Path to doxygen command])
+AC_ARG_VAR([DOT], [Path to the dot graphics utility])
 m4_define([_defopt], m4_default([$2], [auto]))
 AC_ARG_WITH(doxygen,
 	AS_HELP_STRING([--with-doxygen],
@@ -684,6 +686,20 @@ m4_ifval([$1],
             AC_MSG_ERROR([doxygen version $doxygen_version found, but $1 needed])
         fi])
 fi])
+
+dnl Check for DOT if we have doxygen. The caller decides if it is mandatory
+dnl HAVE_DOT is a variable that can be used in your doxygen.in config file:
+dnl 	HAVE_DOT = @HAVE_DOT@
+HAVE_DOT=no
+if test "x$have_doxygen" = "xyes"; then
+  AC_PATH_PROG([DOT], [dot])
+    if test "x$DOT" != "x"; then
+      HAVE_DOT=yes
+    fi
+fi
+
+AC_SUBST([HAVE_DOT])
+AM_CONDITIONAL([HAVE_DOT], [test "$HAVE_DOT" = "yes"])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test "$have_doxygen" = yes])
 ]) # XORG_WITH_DOXYGEN
 
