@@ -1,6 +1,6 @@
 Name:	 util-macros
 Summary: X.Org build utilities
-Version: 1.17
+Version: 1.19.0
 Release: 1
 License: MIT/X11
 Group:   Development/System
@@ -17,7 +17,7 @@ Source1001: 	util-macros.manifest
 cp %{SOURCE1001} .
 
 %build
-%configure
+%autogen
 make
 
 %install
