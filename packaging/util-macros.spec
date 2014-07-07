@@ -8,6 +8,10 @@ URL:     http://www.x.org
 Source: util-macros-%{version}.tar.bz2
 Source1001: 	util-macros.manifest
 
+%if !%{with x}
+ExclusiveArch:
+%endif
+
 %description
  This package provides build utilties tha ship with the X Window System, including:
   - util-macros, autotools macros for X.Org
